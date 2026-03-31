@@ -1,1122 +1,1026 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Planning de Révisions — Concours 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #FAF7F2;
-    --parchment: #F2EDE4;
-    --sand: #E8E0D0;
-    --tan: #D4C5AE;
-    --caramel: #C4A882;
-    --brown-light: #9B7B55;
-    --brown: #7A5C38;
-    --brown-dark: #5A3E22;
-    --espresso: #3B2A18;
-    --ink: #2C1E0F;
-    --green-soft: #D4DFCA;
-    --green: #6A8B5A;
-    --blue-soft: #CAD4DF;
-    --blue: #4A6B8A;
-    --purple-soft: #D8CADF;
-    --purple: #7A5A8A;
-    --red-soft: #DFCACA;
-    --red: #8A4A4A;
-    --gold: #C49A3C;
-    --white: #FFFFFF;
-    --shadow: rgba(58, 42, 24, 0.08);
-  }
+:root {
+  --cream: #FAF7F2; --parchment: #F2EDE4; --sand: #E8E0D0; --tan: #D4C5AE;
+  --caramel: #C4A882; --brown-light: #9B7B55; --brown: #7A5C38;
+  --brown-dark: #5A3E22; --espresso: #3B2A18; --ink: #2C1E0F;
+  --green: #6A8B5A; --blue: #4A6B8A; --blue-soft: #CAD4DF;
+  --purple: #7A5A8A; --red-soft: #DFCACA; --red: #8A4A4A;
+  --gold: #C49A3C; --white: #FFFFFF; --shadow: rgba(58,42,24,0.08);
+  --bg: var(--cream); --surface: var(--white); --surface2: var(--parchment);
+  --border: var(--sand); --text: var(--ink); --text2: var(--brown-light);
+  --header-bg: var(--espresso);
+}
+[data-theme="dark"] {
+  --bg: #1A1410; --surface: #241C14; --surface2: #2E2418;
+  --border: #3D3028; --text: #EDE8E0; --text2: #9B8B75;
+  --header-bg: #0F0C08; --cream: #1A1410; --white: #241C14;
+  --parchment: #2E2418; --sand: #3D3028; --tan: #5A4A35;
+  --ink: #EDE8E0; --brown-light: #B89A75; --espresso: #0F0C08;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); font-family: 'Instrument Sans', sans-serif; color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── CITATION BANNER ── */
+#citation-banner {
+  background: var(--espresso);
+  border-bottom: 1px solid var(--caramel);
+  padding: 0.5rem 2.5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.citation-txt {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--caramel);
+  letter-spacing: 0.01em;
+  flex: 1;
+}
+.citation-author {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--tan);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.citation-next {
+  background: none; border: 1px solid var(--tan); border-radius: 4px;
+  padding: 3px 8px; font-family: 'DM Mono', monospace; font-size: 0.6rem;
+  color: var(--tan); cursor: pointer; letter-spacing: 0.05em; transition: all 0.15s;
+}
+.citation-next:hover { color: var(--caramel); border-color: var(--caramel); }
 
-  body {
-    background: var(--cream);
-    font-family: 'Instrument Sans', sans-serif;
-    color: var(--ink);
-    min-height: 100vh;
-  }
+/* ── HEADER ── */
+header {
+  background: var(--header-bg); padding: 1.5rem 2.5rem 1.2rem;
+  position: sticky; top: 0; z-index: 100;
+  border-bottom: 2px solid var(--caramel);
+}
+.header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+header h1 {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.5rem;
+  font-weight: 500; color: var(--parchment); letter-spacing: 0.02em;
+}
+header p { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--caramel); margin-top: 0.25rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.header-controls { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; }
+.ctrl-btn {
+  background: none; border: 1px solid var(--tan); border-radius: 6px;
+  padding: 5px 12px; font-family: 'DM Mono', monospace; font-size: 0.6rem;
+  color: var(--tan); cursor: pointer; letter-spacing: 0.05em; transition: all 0.15s;
+  white-space: nowrap;
+}
+.ctrl-btn:hover { background: rgba(196,168,130,0.1); color: var(--caramel); border-color: var(--caramel); }
+.streak-badge {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(196,168,130,0.15); border: 1px solid var(--caramel);
+  border-radius: 20px; padding: 4px 12px;
+  font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--caramel);
+}
+.streak-fire { font-size: 0.9rem; }
+.header-stats { display: flex; gap: 2rem; margin-top: 0.8rem; }
+.stat { display: flex; flex-direction: column; }
+.stat-val { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--caramel); line-height: 1; }
+.stat-lbl { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--tan); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
 
-  /* ── HEADER ── */
-  header {
-    background: var(--espresso);
-    padding: 2rem 2.5rem 1.5rem;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 2px solid var(--caramel);
-  }
-  header h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.6rem;
-    font-weight: 500;
-    color: var(--parchment);
-    letter-spacing: 0.02em;
-  }
-  header p {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--caramel);
-    margin-top: 0.3rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .header-stats {
-    display: flex;
-    gap: 2rem;
-    margin-top: 1rem;
-  }
-  .stat {
-    display: flex;
-    flex-direction: column;
-  }
-  .stat-val {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--caramel);
-    line-height: 1;
-  }
-  .stat-lbl {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--tan);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-top: 2px;
-  }
+/* ── LAYOUT ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
 
-  /* ── LAYOUT ── */
-  .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+/* ── TABS ── */
+.tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.tab-btn {
+  background: none; border: none; border-bottom: 2px solid transparent;
+  padding: 0.6rem 1.2rem; font-family: 'DM Mono', monospace; font-size: 0.65rem;
+  color: var(--text2); cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase;
+  transition: all 0.15s; margin-bottom: -1px;
+}
+.tab-btn:hover { color: var(--caramel); }
+.tab-btn.active { color: var(--caramel); border-bottom-color: var(--caramel); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
-  /* ── VUE GLOBALE ── */
-  #vue-globale { margin-bottom: 2.5rem; }
-  .vue-titre {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--brown-light);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-  .grid-semaines {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-  .semaine-bloc {
-    background: var(--white);
-    border: 1px solid var(--sand);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .semaine-header {
-    background: var(--espresso);
-    padding: 0.7rem 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .semaine-header span {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--parchment);
-  }
-  .semaine-header small {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--caramel);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .jours-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0;
-  }
-  .jour-mini {
-    padding: 0.6rem 0.4rem;
-    border-right: 1px solid var(--sand);
-    cursor: pointer;
-    transition: background 0.15s;
-    position: relative;
-  }
-  .jour-mini:last-child { border-right: none; }
-  .jour-mini:hover { background: var(--parchment); }
-  .jour-mini.active { background: var(--espresso); }
-  .jour-mini.active .jm-label { color: var(--caramel); }
-  .jour-mini.active .jm-date { color: var(--parchment); }
-  .jour-mini.weekend { background: var(--parchment); opacity: 0.7; }
-  .jour-mini.weekend:hover { opacity: 1; }
-  .jm-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.55rem;
-    color: var(--brown-light);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display: block;
-    text-align: center;
-  }
-  .jm-date {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
-    font-weight: 500;
-    color: var(--espresso);
-    display: block;
-    text-align: center;
-    line-height: 1.2;
-  }
-  .jm-progress {
-    margin-top: 4px;
-    height: 3px;
-    background: var(--sand);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .jm-bar {
-    height: 100%;
-    background: var(--caramel);
-    border-radius: 2px;
-    transition: width 0.3s;
-  }
-  .jm-check {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--green);
-    display: none;
-  }
-  .jour-mini.complet .jm-check { display: block; }
+/* ── VUE GLOBALE ── */
+.vue-titre { font-family: 'Cormorant Garamond', serif; font-size: 0.85rem; font-weight: 500; color: var(--brown-light); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+.grid-semaines { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.semaine-bloc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.semaine-header { background: var(--espresso); padding: 0.7rem 1.2rem; display: flex; align-items: center; justify-content: space-between; }
+.semaine-header span { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 500; color: var(--parchment); }
+.semaine-header small { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--caramel); letter-spacing: 0.06em; text-transform: uppercase; }
+.jours-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.jour-mini { padding: 0.6rem 0.4rem; border-right: 1px solid var(--border); cursor: pointer; transition: background 0.15s; position: relative; }
+.jour-mini:last-child { border-right: none; }
+.jour-mini:hover { background: var(--surface2); }
+.jour-mini.active { background: var(--espresso); }
+.jour-mini.active .jm-label { color: var(--caramel); }
+.jour-mini.active .jm-date { color: var(--parchment); }
+.jour-mini.weekend { background: var(--surface2); opacity: 0.7; }
+.jour-mini.weekend:hover { opacity: 1; }
+.jm-label { font-family: 'DM Mono', monospace; font-size: 0.55rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; display: block; text-align: center; }
+.jm-date { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 500; color: var(--text); display: block; text-align: center; line-height: 1.2; }
+.jm-progress { margin-top: 4px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.jm-bar { height: 100%; background: var(--caramel); border-radius: 2px; transition: width 0.3s; }
+.jm-check { position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: none; }
+.jour-mini.complet .jm-check { display: block; }
+.jm-retard { display: none; width: 6px; height: 6px; border-radius: 50%; background: var(--red); position: absolute; top: 4px; left: 4px; }
+.jour-mini.has-retard .jm-retard { display: block; }
 
-  /* ── DETAIL JOUR ── */
-  #detail-jour {
-    display: none;
-    animation: fadeIn 0.2s ease;
-  }
-  #detail-jour.visible { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+/* ── DETAIL ── */
+#detail-jour { display: none; animation: fadeIn 0.2s ease; }
+#detail-jour.visible { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.detail-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 0.5rem; }
+.detail-date { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; color: var(--text); line-height: 1; }
+.detail-date span { display: block; font-size: 0.85rem; font-family: 'DM Mono', monospace; color: var(--text2); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; font-weight: 400; }
+.detail-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.badge { font-family: 'DM Mono', monospace; font-size: 0.6rem; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
+.badge-hours { background: var(--espresso); color: var(--caramel); }
+.badge-week { background: var(--surface2); color: var(--brown); border: 1px solid var(--border); }
+.close-btn { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 6px 14px; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text2); cursor: pointer; letter-spacing: 0.05em; transition: all 0.15s; }
+.close-btn:hover { background: var(--surface2); color: var(--text); }
+.jour-progress-wrap { background: var(--surface2); border-radius: 8px; padding: 0.8rem 1rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 1rem; }
+.jour-progress-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.jour-progress-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--brown-light)); border-radius: 3px; transition: width 0.4s ease; }
+.jour-progress-pct { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text2); min-width: 30px; text-align: right; }
+.jour-progress-txt { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--tan); letter-spacing: 0.05em; text-transform: uppercase; }
 
-  .detail-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--sand);
-  }
-  .detail-date {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.2rem;
-    font-weight: 300;
-    color: var(--espresso);
-    line-height: 1;
-  }
-  .detail-date span {
-    display: block;
-    font-size: 0.85rem;
-    font-family: 'DM Mono', monospace;
-    color: var(--brown-light);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-top: 4px;
-    font-weight: 400;
-  }
-  .detail-meta {
-    display: flex;
-    gap: 0.8rem;
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
-  .badge {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    padding: 4px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-  .badge-hours { background: var(--espresso); color: var(--caramel); }
-  .badge-week { background: var(--parchment); color: var(--brown); border: 1px solid var(--tan); }
+/* ── TACHES ── */
+.planning-line { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.6rem; overflow: visible; transition: box-shadow 0.15s; }
+.planning-line:hover { box-shadow: 0 2px 12px var(--shadow); }
+.planning-line.done { opacity: 0.55; }
+.planning-line.done .tache-name { text-decoration: line-through; color: var(--text2); }
+.planning-line.dragging { opacity: 0.4; cursor: grabbing; }
+.planning-line.drag-over { border: 2px dashed var(--caramel); }
+.tache-main { display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1rem; cursor: grab; user-select: none; }
+.tache-check { width: 20px; height: 20px; border: 1.5px solid var(--border); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; cursor: pointer; }
+.tache-check:hover { border-color: var(--caramel); background: var(--surface2); }
+.done .tache-check { background: var(--green); border-color: var(--green); }
+.tache-check svg { display: none; }
+.done .tache-check svg { display: block; }
+.drag-handle { color: var(--border); font-size: 0.9rem; cursor: grab; padding: 0 2px; flex-shrink: 0; }
+.drag-handle:hover { color: var(--caramel); }
+.tache-color { width: 4px; height: 36px; border-radius: 2px; flex-shrink: 0; }
+.tache-info { flex: 1; min-width: 0; }
+.tache-name { font-size: 0.9rem; font-weight: 500; color: var(--text); line-height: 1.3; }
+.tache-sous { font-size: 0.75rem; color: var(--text2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tache-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+.tache-time { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text2); letter-spacing: 0.03em; }
+.tache-dur { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--caramel); background: var(--surface2); padding: 2px 7px; border-radius: 10px; }
+.expand-btn { background: none; border: none; color: var(--border); cursor: pointer; padding: 4px; font-size: 0.7rem; transition: color 0.15s; }
+.expand-btn:hover { color: var(--text2); }
+.tache-detail { display: none; padding: 0 1rem 0.8rem 3.8rem; border-top: 1px solid var(--border); }
+.tache-detail.open { display: block; }
+.detail-list { list-style: none; padding-top: 0.6rem; }
+.detail-list li { font-size: 0.8rem; color: var(--brown-dark); padding: 3px 0; padding-left: 1rem; position: relative; line-height: 1.5; color: var(--text2); }
+.detail-list li::before { content: '—'; position: absolute; left: 0; color: var(--caramel); font-size: 0.7rem; }
+.detail-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 0.6rem; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--blue); text-decoration: none; letter-spacing: 0.04em; border: 1px solid var(--blue-soft); padding: 4px 10px; border-radius: 6px; background: var(--blue-soft); opacity: 0.8; transition: opacity 0.15s; }
+.detail-link:hover { opacity: 1; }
 
-  .close-btn {
-    background: none;
-    border: 1px solid var(--tan);
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--brown-light);
-    cursor: pointer;
-    letter-spacing: 0.05em;
-    transition: all 0.15s;
-  }
-  .close-btn:hover { background: var(--parchment); color: var(--espresso); }
+/* ── TIMER ── */
+.timer-wrap { display: flex; align-items: center; gap: 6px; margin-top: 6px; padding: 4px 0; }
+.timer-display { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--caramel); min-width: 42px; }
+.timer-display.running { color: var(--green); }
+.timer-display.ended { color: var(--red); animation: blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.timer-btn { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text2); cursor: pointer; transition: all 0.15s; }
+.timer-btn:hover { border-color: var(--caramel); color: var(--caramel); }
+.timer-btn.active { background: var(--caramel); border-color: var(--caramel); color: var(--espresso); }
+.timer-progress { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.timer-bar { height: 100%; background: var(--caramel); border-radius: 2px; transition: width 1s linear; }
 
-  /* ── BLOCS DE TÂCHES ── */
-  .planning-line {
-    background: var(--white);
-    border: 1px solid var(--sand);
-    border-radius: 10px;
-    margin-bottom: 0.6rem;
-    overflow: hidden;
-    transition: box-shadow 0.15s;
-  }
-  .planning-line:hover { box-shadow: 0 2px 12px var(--shadow); }
-  .planning-line.done { opacity: 0.55; }
-  .planning-line.done .tache-name { text-decoration: line-through; color: var(--brown-light); }
+/* ── EDIT MODAL ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; width: 90%; max-width: 480px; max-height: 80vh; overflow-y: auto; }
+.modal h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 500; color: var(--text); margin-bottom: 1rem; }
+.modal-field { margin-bottom: 0.8rem; }
+.modal-field label { display: block; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.modal-input, .modal-select, .modal-textarea {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 7px; padding: 0.5rem 0.7rem; font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.8rem; color: var(--text); outline: none; transition: border-color 0.15s;
+}
+.modal-input:focus, .modal-select:focus, .modal-textarea:focus { border-color: var(--caramel); }
+.modal-textarea { min-height: 60px; resize: vertical; }
+.modal-btns { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem; }
+.modal-btn { padding: 6px 16px; border-radius: 6px; font-family: 'DM Mono', monospace; font-size: 0.62rem; cursor: pointer; letter-spacing: 0.05em; transition: all 0.15s; }
+.modal-btn-cancel { background: none; border: 1px solid var(--border); color: var(--text2); }
+.modal-btn-cancel:hover { background: var(--surface2); }
+.modal-btn-save { background: var(--espresso); border: 1px solid var(--caramel); color: var(--caramel); }
+.modal-btn-save:hover { background: var(--caramel); color: var(--espresso); }
+.edit-tache-btn { background: none; border: none; color: var(--border); cursor: pointer; font-size: 0.7rem; padding: 2px 4px; transition: color 0.15s; }
+.edit-tache-btn:hover { color: var(--caramel); }
+.add-tache-btn { width: 100%; background: none; border: 1.5px dashed var(--border); border-radius: 8px; padding: 0.6rem; font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text2); cursor: pointer; letter-spacing: 0.05em; transition: all 0.15s; margin-top: 0.5rem; }
+.add-tache-btn:hover { border-color: var(--caramel); color: var(--caramel); }
 
-  .tache-main {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 0.75rem 1rem;
-    cursor: pointer;
-    user-select: none;
-  }
-  .tache-check {
-    width: 20px;
-    height: 20px;
-    border: 1.5px solid var(--tan);
-    border-radius: 50%;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    cursor: pointer;
-  }
-  .tache-check:hover { border-color: var(--caramel); background: var(--parchment); }
-  .done .tache-check {
-    background: var(--green);
-    border-color: var(--green);
-  }
-  .tache-check svg { display: none; }
-  .done .tache-check svg { display: block; }
+/* ── SEP ── */
+.sep { display: flex; align-items: center; gap: 0.6rem; margin: 0.8rem 0 0.5rem; }
+.sep-line { flex: 1; height: 1px; background: var(--border); }
+.sep-label { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--tan); text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap; }
 
-  .tache-color {
-    width: 4px;
-    height: 36px;
-    border-radius: 2px;
-    flex-shrink: 0;
-  }
-  .tache-info { flex: 1; }
-  .tache-name {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--espresso);
-    line-height: 1.3;
-  }
-  .tache-sous {
-    font-size: 0.75rem;
-    color: var(--brown-light);
-    margin-top: 2px;
-  }
-  .tache-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 3px;
-  }
-  .tache-time {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--brown-light);
-    letter-spacing: 0.03em;
-  }
-  .tache-dur {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--caramel);
-    background: var(--parchment);
-    padding: 2px 7px;
-    border-radius: 10px;
-  }
-  .expand-btn {
-    background: none;
-    border: none;
-    color: var(--tan);
-    cursor: pointer;
-    padding: 4px;
-    font-size: 0.7rem;
-    transition: color 0.15s;
-  }
-  .expand-btn:hover { color: var(--brown); }
+/* ── COLORS ── */
+.c-esh { background: var(--caramel); }
+.c-maths { background: var(--green); }
+.c-anglais, .c-italien { background: var(--blue); }
+.c-philo { background: var(--purple); }
+.c-anki { background: var(--gold); }
+.c-pause { background: var(--tan); }
+.c-custom { background: var(--brown-light); }
 
-  /* ── DÉTAIL EXPANDABLE ── */
-  .tache-detail {
-    display: none;
-    padding: 0 1rem 0.8rem 3.4rem;
-    border-top: 1px solid var(--sand);
-  }
-  .tache-detail.open { display: block; }
-  .detail-list { list-style: none; padding-top: 0.6rem; }
-  .detail-list li {
-    font-size: 0.8rem;
-    color: var(--brown-dark);
-    padding: 3px 0;
-    padding-left: 1rem;
-    position: relative;
-    line-height: 1.5;
-  }
-  .detail-list li::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: var(--caramel);
-    font-size: 0.7rem;
-  }
-  .detail-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 0.6rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--blue);
-    text-decoration: none;
-    letter-spacing: 0.04em;
-    border: 1px solid var(--blue-soft);
-    padding: 4px 10px;
-    border-radius: 6px;
-    background: var(--blue-soft);
-    opacity: 0.8;
-    transition: opacity 0.15s;
-  }
-  .detail-link:hover { opacity: 1; }
+/* ── NOTES SPECIALES ── */
+.note-special { background: var(--surface2); border-left: 3px solid var(--caramel); border-radius: 0 8px 8px 0; padding: 0.7rem 1rem; margin-bottom: 1rem; font-size: 0.8rem; color: var(--text2); font-style: italic; }
+.report-bandeau { background: rgba(138,74,74,0.08); border: 1.5px solid var(--red-soft); border-left: 4px solid var(--red); border-radius: 0 8px 8px 0; padding: 0.8rem 1rem; margin-bottom: 1rem; }
+.report-bandeau-titre { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--red); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+.report-item { font-size: 0.8rem; color: var(--text2); padding: 2px 0 2px 0.8rem; position: relative; }
+.report-item::before { content: '↳'; position: absolute; left: 0; color: var(--red); font-size: 0.7rem; }
+.report-note-txt { font-size: 0.78rem; color: var(--text2); font-style: italic; margin-top: 0.4rem; padding-left: 0.8rem; border-left: 2px solid var(--red-soft); }
 
-  /* ── SÉPARATEURS ── */
-  .sep {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin: 0.8rem 0 0.5rem;
-  }
-  .sep-line { flex: 1; height: 1px; background: var(--sand); }
-  .sep-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.58rem;
-    color: var(--tan);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    white-space: nowrap;
-  }
+/* ── RETARD ── */
+.retard-section { margin-top: 1.5rem; border: 1.5px dashed var(--border); border-radius: 10px; padding: 1rem 1.2rem; background: var(--surface); }
+.retard-titre { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+.retard-titre::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+.retard-tache-item { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 0.5px solid var(--border); font-size: 0.8rem; color: var(--text); }
+.retard-tache-item:last-child { border-bottom: none; }
+.retard-check { width: 16px; height: 16px; border: 1.5px solid var(--red); border-radius: 3px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.retard-check:hover { background: var(--red-soft); }
+.retard-check.reported { background: var(--red); border-color: var(--red); }
+.retard-check.reported svg { display: block !important; }
+.retard-check svg { display: none; }
+.retard-textarea { width: 100%; min-height: 60px; background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; padding: 0.5rem 0.7rem; font-family: 'Instrument Sans', sans-serif; font-size: 0.78rem; color: var(--text); resize: vertical; outline: none; transition: border-color 0.15s; }
+.retard-textarea:focus { border-color: var(--caramel); }
+.retard-textarea::placeholder { color: var(--tan); font-style: italic; }
+.retard-save-btn { margin-top: 0.5rem; background: none; border: 1px solid var(--caramel); border-radius: 6px; padding: 5px 14px; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--brown); cursor: pointer; letter-spacing: 0.05em; transition: all 0.15s; }
+.retard-save-btn:hover { background: var(--surface2); }
 
-  /* ── COLORS par matière ── */
-  .c-esh { background: var(--caramel); }
-  .c-maths { background: var(--green); }
-  .c-anglais { background: var(--blue); }
-  .c-italien { background: var(--blue); }
-  .c-philo { background: var(--purple); }
-  .c-anki { background: var(--gold); }
-  .c-pause { background: var(--tan); }
+/* ── STATS ── */
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; }
+.stat-card-val { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--caramel); line-height: 1; }
+.stat-card-lbl { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+.stats-chart-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; margin-bottom: 1.5rem; }
+.stats-chart-title { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+.bar-chart { display: flex; flex-direction: column; gap: 0.6rem; }
+.bar-row { display: flex; align-items: center; gap: 0.8rem; }
+.bar-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text2); width: 70px; text-align: right; flex-shrink: 0; }
+.bar-track { flex: 1; height: 18px; background: var(--border); border-radius: 4px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; display: flex; align-items: center; padding-left: 6px; }
+.bar-fill span { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: rgba(255,255,255,0.8); white-space: nowrap; }
+.completion-chart { display: grid; grid-template-columns: repeat(15, 1fr); gap: 3px; margin-top: 0.8rem; }
+.comp-cell { aspect-ratio: 1; border-radius: 3px; background: var(--border); transition: background 0.3s; position: relative; cursor: default; }
+.comp-cell.full { background: var(--green); }
+.comp-cell.partial { background: var(--caramel); }
+.comp-cell.none { background: var(--border); }
+.comp-cell.future { background: var(--surface2); border: 1px solid var(--border); }
+.comp-legend { display: flex; gap: 1rem; margin-top: 0.6rem; }
+.comp-legend-item { display: flex; align-items: center; gap: 5px; font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text2); }
+.comp-legend-dot { width: 10px; height: 10px; border-radius: 2px; }
 
-  /* ── PROGRESS BAR JOUR ── */
-  .jour-progress-wrap {
-    background: var(--parchment);
-    border-radius: 8px;
-    padding: 0.8rem 1rem;
-    margin-bottom: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .jour-progress-bar {
-    flex: 1;
-    height: 6px;
-    background: var(--sand);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .jour-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--caramel), var(--brown-light));
-    border-radius: 3px;
-    transition: width 0.4s ease;
-  }
-  .jour-progress-pct {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--brown-light);
-    min-width: 30px;
-    text-align: right;
-  }
-  .jour-progress-txt {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--tan);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
+/* ── CONFETTIS ── */
+#confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
 
-  /* ── NOTE / SPECIAL ── */
-  .note-special {
-    background: var(--parchment);
-    border-left: 3px solid var(--caramel);
-    border-radius: 0 8px 8px 0;
-    padding: 0.7rem 1rem;
-    margin-bottom: 1rem;
-    font-size: 0.8rem;
-    color: var(--brown-dark);
-    font-style: italic;
-  }
-
-  /* ── SECTION RETARD ── */
-  .retard-section {
-    margin-top: 1.5rem;
-    border: 1.5px dashed var(--tan);
-    border-radius: 10px;
-    padding: 1rem 1.2rem;
-    background: var(--white);
-  }
-  .retard-titre {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--brown-light);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .retard-titre::before {
-    content: '';
-    display: inline-block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--red);
-    flex-shrink: 0;
-  }
-  .retard-taches-list { margin-bottom: 0.8rem; }
-  .retard-tache-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 5px 0;
-    border-bottom: 0.5px solid var(--sand);
-    font-size: 0.8rem;
-    color: var(--brown-dark);
-  }
-  .retard-tache-item:last-child { border-bottom: none; }
-  .retard-check {
-    width: 16px; height: 16px;
-    border: 1.5px solid var(--red);
-    border-radius: 3px;
-    flex-shrink: 0;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-  }
-  .retard-check:hover { background: var(--red-soft); }
-  .retard-check.reported { background: var(--red); border-color: var(--red); }
-  .retard-check.reported svg { display: block; }
-  .retard-check svg { display: none; }
-  .retard-note-wrap { margin-top: 0.6rem; }
-  .retard-note-wrap label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.58rem;
-    color: var(--tan);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    display: block;
-    margin-bottom: 4px;
-  }
-  .retard-textarea {
-    width: 100%;
-    min-height: 60px;
-    background: var(--parchment);
-    border: 1px solid var(--sand);
-    border-radius: 7px;
-    padding: 0.5rem 0.7rem;
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.78rem;
-    color: var(--espresso);
-    resize: vertical;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .retard-textarea:focus { border-color: var(--caramel); }
-  .retard-textarea::placeholder { color: var(--tan); font-style: italic; }
-  .retard-save-btn {
-    margin-top: 0.5rem;
-    background: none;
-    border: 1px solid var(--caramel);
-    border-radius: 6px;
-    padding: 5px 14px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--brown);
-    cursor: pointer;
-    letter-spacing: 0.05em;
-    transition: all 0.15s;
-  }
-  .retard-save-btn:hover { background: var(--parchment); color: var(--espresso); }
-
-  /* ── BANDEAU REPORT (affiché sur le jour suivant) ── */
-  .report-bandeau {
-    background: #FFF6F0;
-    border: 1.5px solid var(--red-soft);
-    border-left: 4px solid var(--red);
-    border-radius: 0 8px 8px 0;
-    padding: 0.8rem 1rem;
-    margin-bottom: 1rem;
-  }
-  .report-bandeau-titre {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--red);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 0.5rem;
-  }
-  .report-item {
-    font-size: 0.8rem;
-    color: var(--brown-dark);
-    padding: 2px 0;
-    padding-left: 0.8rem;
-    position: relative;
-  }
-  .report-item::before { content: '↳'; position: absolute; left: 0; color: var(--red); font-size: 0.7rem; }
-  .report-note-txt {
-    font-size: 0.78rem;
-    color: var(--brown);
-    font-style: italic;
-    margin-top: 0.4rem;
-    padding-left: 0.8rem;
-    border-left: 2px solid var(--red-soft);
-  }
-
-  /* ── INDICATEUR mini sur accueil ── */
-  .jm-retard {
-    display: none;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--red);
-    position: absolute;
-    top: 4px; left: 4px;
-  }
-  .jour-mini.has-retard .jm-retard { display: block; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 680px) {
-    .grid-semaines { grid-template-columns: 1fr; }
-    header { padding: 1.2rem 1rem 1rem; }
-    .header-stats { gap: 1.2rem; }
-    .container { padding: 1rem; }
-  }
+/* ── RESPONSIVE ── */
+@media (max-width: 680px) {
+  .grid-semaines { grid-template-columns: 1fr; }
+  header { padding: 1rem 1rem 0.8rem; }
+  #citation-banner { padding: 0.5rem 1rem; }
+  .header-stats { gap: 1rem; flex-wrap: wrap; }
+  .container { padding: 1rem; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+}
 </style>
 </head>
 <body>
 
+<canvas id="confetti-canvas"></canvas>
+
+<!-- CITATION -->
+<div id="citation-banner">
+  <span class="citation-txt" id="citation-txt"></span>
+  <span class="citation-author" id="citation-author"></span>
+  <button class="citation-next" onclick="nextCitation()">↺</button>
+</div>
+
 <header>
-  <h1>Planning de Révisions — Concours 2026</h1>
-  <p>6 avril → 20 avril · ESH · Maths · Anglais · Italien · Philosophie · Anki</p>
+  <div class="header-top">
+    <div>
+      <h1>Planning de Révisions — Concours 2026</h1>
+      <p>6 avril → 20 avril · ESH · Maths · Anglais · Italien · Philosophie · Anki</p>
+    </div>
+    <div class="header-controls">
+      <div class="streak-badge"><span class="streak-fire">🔥</span><span id="streak-val">0</span> jours</div>
+      <button class="ctrl-btn" onclick="toggleTheme()">🌙 Mode sombre</button>
+      <button class="ctrl-btn" onclick="requestNotifPerm()">🔔 Notifs</button>
+    </div>
+  </div>
   <div class="header-stats">
-    <div class="stat">
-      <span class="stat-val" id="stat-total">0</span>
-      <span class="stat-lbl">Tâches complètes</span>
-    </div>
-    <div class="stat">
-      <span class="stat-val" id="stat-pct">0%</span>
-      <span class="stat-lbl">Avancement global</span>
-    </div>
-    <div class="stat">
-      <span class="stat-val" id="stat-jours">0</span>
-      <span class="stat-lbl">Jours restants</span>
-    </div>
+    <div class="stat"><span class="stat-val" id="stat-total">0</span><span class="stat-lbl">Tâches complètes</span></div>
+    <div class="stat"><span class="stat-val" id="stat-pct">0%</span><span class="stat-lbl">Avancement global</span></div>
+    <div class="stat"><span class="stat-val" id="stat-jours">0</span><span class="stat-lbl">Jours restants</span></div>
   </div>
 </header>
 
 <div class="container">
-  <!-- VUE GLOBALE -->
-  <div id="vue-globale">
-    <div class="vue-titre">Vue d'ensemble des vacances</div>
-    <div class="grid-semaines">
-      <div class="semaine-bloc">
-        <div class="semaine-header">
-          <span>Semaine 1</span>
-          <small>6 → 12 avril</small>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('planning')">Planning</button>
+    <button class="tab-btn" onclick="switchTab('stats')">Statistiques</button>
+  </div>
+
+  <!-- TAB PLANNING -->
+  <div id="tab-planning" class="tab-content active">
+    <div id="vue-globale" style="margin-bottom:2.5rem">
+      <div class="vue-titre">Vue d'ensemble des vacances</div>
+      <div class="grid-semaines">
+        <div class="semaine-bloc">
+          <div class="semaine-header"><span>Semaine 1</span><small>6 → 12 avril</small></div>
+          <div class="jours-grid" id="grid-s1"></div>
         </div>
-        <div class="jours-grid" id="grid-s1"></div>
-      </div>
-      <div class="semaine-bloc">
-        <div class="semaine-header">
-          <span>Semaine 2</span>
-          <small>13 → 20 avril</small>
+        <div class="semaine-bloc">
+          <div class="semaine-header"><span>Semaine 2</span><small>13 → 20 avril</small></div>
+          <div class="jours-grid" id="grid-s2"></div>
         </div>
-        <div class="jours-grid" id="grid-s2"></div>
       </div>
+    </div>
+
+    <div id="detail-jour">
+      <div class="detail-header">
+        <div>
+          <div class="detail-date" id="detail-titre">Dimanche 6 avril</div>
+          <div style="display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap;" id="detail-badges"></div>
+        </div>
+        <div class="detail-btns">
+          <button class="ctrl-btn" onclick="openAddTacheModal()">+ Tâche</button>
+          <button class="close-btn" onclick="fermerDetail()">✕ Fermer</button>
+        </div>
+      </div>
+      <div id="detail-note"></div>
+      <div class="jour-progress-wrap">
+        <span class="jour-progress-txt">Progression</span>
+        <div class="jour-progress-bar"><div class="jour-progress-fill" id="jour-progress-fill" style="width:0%"></div></div>
+        <span class="jour-progress-pct" id="jour-progress-pct">0%</span>
+      </div>
+      <div id="detail-taches"></div>
     </div>
   </div>
 
-  <!-- DETAIL JOUR -->
-  <div id="detail-jour">
-    <div class="detail-header">
-      <div>
-        <div class="detail-date" id="detail-titre">Dimanche 6 avril</div>
-        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap;" id="detail-badges"></div>
+  <!-- TAB STATS -->
+  <div id="tab-stats" class="tab-content">
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="stats-chart-wrap">
+      <div class="stats-chart-title">Heures de travail par matière (estimées)</div>
+      <div class="bar-chart" id="bar-chart"></div>
+    </div>
+    <div class="stats-chart-wrap">
+      <div class="stats-chart-title">Taux de complétion par jour</div>
+      <div class="completion-chart" id="completion-chart"></div>
+      <div class="comp-legend">
+        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--green)"></div>100%</div>
+        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--caramel)"></div>En cours</div>
+        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--border)"></div>0%</div>
+        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--surface2);border:1px solid var(--border)"></div>À venir</div>
       </div>
-      <button class="close-btn" onclick="fermerDetail()">✕ Fermer</button>
     </div>
-    <div id="detail-note"></div>
-    <div class="jour-progress-wrap">
-      <span class="jour-progress-txt">Progression du jour</span>
-      <div class="jour-progress-bar"><div class="jour-progress-fill" id="jour-progress-fill" style="width:0%"></div></div>
-      <span class="jour-progress-pct" id="jour-progress-pct">0%</span>
+  </div>
+</div>
+
+<!-- MODAL EDIT TACHE -->
+<div class="modal-overlay" id="modal-edit">
+  <div class="modal">
+    <h3 id="modal-title">Modifier la tâche</h3>
+    <input type="hidden" id="modal-jour-id">
+    <input type="hidden" id="modal-tache-id">
+    <div class="modal-field">
+      <label>Nom de la tâche</label>
+      <input class="modal-input" id="modal-name" type="text" placeholder="Ex : ESH — Révision">
     </div>
-    <div id="detail-taches"></div>
+    <div class="modal-field">
+      <label>Sous-titre / détail</label>
+      <input class="modal-input" id="modal-sous" type="text" placeholder="Ex : Chapitres monnaie">
+    </div>
+    <div class="modal-field">
+      <label>Heure</label>
+      <input class="modal-input" id="modal-time" type="text" placeholder="Ex : 9h00">
+    </div>
+    <div class="modal-field">
+      <label>Durée</label>
+      <input class="modal-input" id="modal-dur" type="text" placeholder="Ex : 2h">
+    </div>
+    <div class="modal-field">
+      <label>Durée en minutes (pour le timer)</label>
+      <input class="modal-input" id="modal-mins" type="number" placeholder="Ex : 120">
+    </div>
+    <div class="modal-field">
+      <label>Matière</label>
+      <select class="modal-select" id="modal-mat">
+        <option value="ESH">ESH</option>
+        <option value="Maths">Maths</option>
+        <option value="Anglais">Anglais</option>
+        <option value="Italien">Italien</option>
+        <option value="Philo">Philosophie</option>
+        <option value="Anki">Anki</option>
+        <option value="custom">Autre</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Notes / détails (une ligne par point)</label>
+      <textarea class="modal-textarea" id="modal-details" placeholder="Point 1&#10;Point 2"></textarea>
+    </div>
+    <div class="modal-field">
+      <label>Lien ressource (optionnel)</label>
+      <input class="modal-input" id="modal-link" type="url" placeholder="https://...">
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn modal-btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="modal-btn modal-btn-cancel" id="modal-delete-btn" onclick="deleteTache()" style="color:var(--red);border-color:var(--red-soft)">Supprimer</button>
+      <button class="modal-btn modal-btn-save" onclick="saveTache()">Enregistrer</button>
+    </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// DONNÉES
-// ═══════════════════════════════════════════════════════
-
-const CHAPITRES_ESH = [
-  { id: 'esh1', label: 'HPE + Chap. 1', detail: ['Histoire de la pensée économique', 'Problématiques macro : consommation, épargne, État', 'Fondements de la macroéconomie'], jours: 1 },
-  { id: 'esh2a', label: 'CPP + Défaillances du marché + Concurrence imparfaite', detail: ['Concurrence pure et parfaite', 'Défaillances de marché (externalités, biens publics)', 'Monopole, oligopole, concurrence monopolistique'], jours: 1 },
-  { id: 'esh2b', label: 'Concentration + Gouvernance + Sociologies', detail: ['Concentration des entreprises et gouvernance', 'Sociologie des organisations', 'Sociologie du travail', 'Politique de la concurrence'], jours: 1 },
-  { id: 'esh3', label: 'Système productif + Politiques industrielle, concurrence, fiscale', detail: ['Transformation du système productif', 'Politique industrielle (chap. 12)', 'Politique de la concurrence (chap. 12)', 'Politique fiscale (chap. 12)'], jours: 1 },
-  { id: 'esh4a', label: 'Croissance économique + Économie du développement + Dette publique', detail: ['Théories et modèles de la croissance', 'Économie du développement (IDH, convergence)', 'La question de la dette publique'], jours: 1 },
-  { id: 'esh4b', label: 'Mondialisation (1/2)', detail: ['Commerce international : théories classiques et nouvelles', 'Flux de capitaux et investissements directs étrangers', 'Firmes multinationales'], jours: 1 },
-  { id: 'esh4c', label: 'Mondialisation (2/2) + Fluctuations et crises + OG-DG', detail: ['Mondialisation et inégalités', 'Fluctuations, crises économiques', 'Modèle Offre Globale / Demande Globale', 'Politiques conjoncturelles'], jours: 1 },
-  { id: 'esh5a', label: 'Monnaie + Balance des paiements + Taux de change', detail: ['Création monétaire, rôles de la monnaie', 'Balance des paiements', 'Taux de change : régimes et déterminants'], jours: 1 },
-  { id: 'esh5b', label: 'IS-LM + IS-LM-BP + SMI + GF + Inflation', detail: ['Modèle IS-LM', 'Extension IS-LM-BP (Mundell-Fleming)', 'Système monétaire international', 'Globalisation financière', 'Inflation : causes, mesure, politiques'], jours: 1 },
-  { id: 'esh5c', label: 'Monnaie — révision approfondie (chapitres techniques)', detail: ['Révision globale du bloc monétaire', 'Retour sur les mécanismes IS-LM difficiles', 'Entraînement sur sujets type concours'], jours: 1 },
-  { id: 'esh6a', label: 'Europe + Chômage', detail: ['Construction et institutions européennes', 'Zone euro et politiques communes', 'Théories et mesures du chômage'], jours: 1 },
-  { id: 'esh6b', label: 'Politique de l\'emploi + Révision chômage (technique)', detail: ['Politiques actives et passives de l\'emploi', 'Marché du travail : flexibilité, dualisme', 'Révision approfondie du chapitre chômage'], jours: 1 },
-  { id: 'esh7', label: 'Démographie + Politiques sociales', detail: ['Transitions démographiques', 'Systèmes de protection sociale', 'Politiques sociales comparées'], jours: 0.5 },
-  { id: 'esh8', label: 'Structure sociale + Mobilité sociale', detail: ['Stratification et classes sociales', 'Mobilité sociale : mesure et déterminants', 'Reproduction sociale (Bourdieu, etc.)'], jours: 0.5 },
+// ════════════════════════════════════════════════
+// CITATIONS GOGGINS
+// ════════════════════════════════════════════════
+const CITATIONS = [
+  { txt: "Dépasse le sous-homme que tu étais hier. Chaque heure de faiblesse est une heure offerte à tes concurrents.", author: "Mentalité Goggins" },
+  { txt: "Stay hard. Le confort est le pire ennemi de l'excellence.", author: "David Goggins" },
+  { txt: "Tu ne seras jamais prêt. Commence quand même. Maintenant.", author: "Mentalité Goggins" },
+  { txt: "Quand ton cerveau dit stop, tu es à 40% de tes capacités réelles. Pousse encore.", author: "David Goggins" },
+  { txt: "La douleur de la discipline est toujours moins grande que la douleur du regret.", author: "Mentalité concours" },
+  { txt: "Ils dorment. Toi, tu construis ton avenir page après page.", author: "Mentalité Goggins" },
+  { txt: "Be uncommon amongst uncommon people. Tes rivaux bossent aussi — travaille plus.", author: "David Goggins" },
+  { txt: "Le talent sans travail n'est rien. Le travail sans talent bat le talent.", author: "Mentalité concours" },
+  { txt: "Personne ne vient te sauver. Personne. Lève-toi.", author: "Mentalité Goggins" },
+  { txt: "Chaque chapitre révisé est une balle dans le chargeur. Charge ton arme.", author: "Mentalité concours" },
+  { txt: "You are in danger of living a life so comfortable and soft that you will die without ever realizing your true potential.", author: "David Goggins" },
+  { txt: "Embrace the suck. C'est précisément quand c'est dur que tu progresses.", author: "Mentalité Goggins" },
+  { txt: "Ce soir tu souffres sur un chapitre. Dans six mois tu souris sur une liste d'admis.", author: "Mentalité concours" },
+  { txt: "Callous your mind. Chaque heure difficile rend la suivante plus facile.", author: "David Goggins" },
+  { txt: "Le champion que tu veux être est de l'autre côté de la paresse que tu dois tuer.", author: "Mentalité Goggins" },
 ];
+let citIdx = Math.floor(Math.random() * CITATIONS.length);
+function showCitation() {
+  const c = CITATIONS[citIdx];
+  document.getElementById('citation-txt').textContent = `"${c.txt}"`;
+  document.getElementById('citation-author').textContent = `— ${c.author}`;
+}
+function nextCitation() {
+  citIdx = (citIdx + 1) % CITATIONS.length;
+  showCitation();
+}
+showCitation();
 
-// 17 chapitres maths 2A + chapitres 1A (regroupés par thème pour 2 exercices/jour)
+// ════════════════════════════════════════════════
+// DARK MODE
+// ════════════════════════════════════════════════
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  document.querySelector('[onclick="toggleTheme()"]').textContent = isDark ? '🌙 Mode sombre' : '☀️ Mode clair';
+}
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  if (savedTheme === 'dark') document.querySelector('[onclick="toggleTheme()"]').textContent = '☀️ Mode clair';
+}
+
+// ════════════════════════════════════════════════
+// NOTIFICATIONS
+// ════════════════════════════════════════════════
+async function requestNotifPerm() {
+  if (!('Notification' in window)) { alert('Notifications non supportées par ce navigateur.'); return; }
+  const perm = await Notification.requestPermission();
+  if (perm === 'granted') {
+    new Notification('Planning Révisions 2026', { body: 'Les notifications sont activées ! 🔥', icon: '' });
+  }
+}
+function sendNotif(title, body) {
+  if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+    new Notification(title, { body, silent: false });
+  }
+}
+
+// ════════════════════════════════════════════════
+// TABS
+// ════════════════════════════════════════════════
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', ['planning','stats'][i] === tab));
+  document.getElementById('tab-planning').classList.toggle('active', tab === 'planning');
+  document.getElementById('tab-stats').classList.toggle('active', tab === 'stats');
+  if (tab === 'stats') renderStats();
+}
+
+// ════════════════════════════════════════════════
+// DONNÉES ESH & MATHS
+// ════════════════════════════════════════════════
+const CHAPITRES_ESH = [
+  { id:'esh1', detail:['Histoire de la pensée économique','Problématiques macro : consommation, épargne, État','Fondements de la macroéconomie'] },
+  { id:'esh2a', detail:['Concurrence pure et parfaite','Défaillances de marché (externalités, biens publics)','Monopole, oligopole, concurrence monopolistique'] },
+  { id:'esh2b', detail:['Concentration des entreprises et gouvernance','Sociologie des organisations','Sociologie du travail','Politique de la concurrence'] },
+  { id:'esh3', detail:['Transformation du système productif','Politique industrielle (chap. 12)','Politique de la concurrence (chap. 12)','Politique fiscale (chap. 12)'] },
+  { id:'esh4a', detail:['Théories et modèles de la croissance','Économie du développement (IDH, convergence)','La question de la dette publique'] },
+  { id:'esh5', detail:['Commerce international : théories classiques et nouvelles','Flux de capitaux et investissements directs étrangers','Firmes multinationales'] },
+  { id:'esh6', detail:['Mondialisation et inégalités','Fluctuations, crises économiques','Modèle OG/DG','Politiques conjoncturelles'] },
+  { id:'esh7', detail:['Création monétaire, rôles de la monnaie','Balance des paiements','Taux de change : régimes et déterminants'] },
+  { id:'esh8', detail:['Modèle IS-LM','Extension IS-LM-BP (Mundell-Fleming)','Système monétaire international','Globalisation financière','Inflation'] },
+  { id:'esh9', detail:['Révision globale du bloc monétaire','Retour sur IS-LM difficiles','Entraînement sujets concours'] },
+  { id:'esh10', detail:['Construction et institutions européennes','Zone euro et politiques communes','Théories et mesures du chômage'] },
+  { id:'esh11', detail:['Politiques actives et passives de l\'emploi','Marché du travail : flexibilité, dualisme','Révision approfondie chômage'] },
+  { id:'esh12', detail:['Transitions démographiques','Systèmes de protection sociale','Politiques sociales comparées'] },
+  { id:'esh13', detail:['Stratification et classes sociales','Mobilité sociale : mesure et déterminants','Reproduction sociale (Bourdieu)'] },
+];
 const CHAPITRES_MATHS_1A = [
-  { id: 'm1a_1', label: '1A — Bases, sommes, ensembles', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 1 : Les bases', 'Chap. 2 : Sommes et produits', 'Chap. 3 : Ensembles'] },
-  { id: 'm1a_2', label: '1A — Applications, coeff. binomiaux, suites', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 4 : Injection, surjection, bijection', 'Chap. 5 : Coefficients binomiaux', 'Chap. 6 : Suites et suites usuelles'] },
-  { id: 'm1a_3', label: '1A — Fonctions usuelles, polynômes, limites', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 1 (ancien) : Fonctions usuelles', 'Chap. 5 (ancien) : Polynômes', 'Chap. 6 (ancien) : Limites de fonctions'] },
-  { id: 'm1a_4', label: '1A — Matrices, limites de suites, probas fini', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 9 : Matrices', 'Chap. 10 : Limites de suites', 'Chap. 12 : Probabilités en univers fini'] },
-  { id: 'm1a_5', label: '1A — Continuité, séries, probas infini', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 13 : Continuité des fonctions', 'Chap. 14 : Séries numériques', 'Chap. 16 : Probabilités en univers infini'] },
-  { id: 'm1a_6', label: '1A — Dérivabilité, VA discrètes, intégrales', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 17 : Dérivabilité et convexité', 'Chap. 18 : VA discrètes (généralités)', 'Chap. 19 : Intégrales sur un segment'] },
-  { id: 'm1a_7', label: '1A — Lois discrètes, équa. diff., syst. linéaires', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 21 : Lois discrètes usuelles', 'Chap. 15 : Équations différentielles (1A)', 'Chap. 16 : Systèmes linéaires (1A)'] },
-  { id: 'm1a_8', label: '1A — Espaces vectoriels, appli. linéaires (1A)', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 18 : Espaces vectoriels (1A)', 'Chap. 19 : Applications linéaires (1A)', 'Chap. 24 : Graphes'] },
+  { label:'1A — Bases, sommes, ensembles', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres:['Chap. 1 : Les bases','Chap. 2 : Sommes et produits','Chap. 3 : Ensembles'] },
+  { label:'1A — Applications, coeff. binomiaux, suites', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres:['Chap. 4 : Injection/surjection/bijection','Chap. 5 : Coefficients binomiaux','Chap. 6 : Suites'] },
+  { label:'1A — Fonctions, polynômes, limites', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres:['Chap. 1 (anc.) : Fonctions usuelles','Chap. 5 (anc.) : Polynômes','Chap. 6 (anc.) : Limites de fonctions'] },
+  { label:'1A — Matrices, limites suites, probas fini', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres:['Chap. 9 : Matrices','Chap. 10 : Limites de suites','Chap. 12 : Probas en univers fini'] },
+  { label:'1A — Continuité, séries, probas infini', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres:['Chap. 13 : Continuité','Chap. 14 : Séries numériques','Chap. 16 : Probas en univers infini'] },
+  { label:'1A — Dérivabilité, VA discrètes, intégrales', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres:['Chap. 17 : Dérivabilité et convexité','Chap. 18 : VA discrètes','Chap. 19 : Intégrales sur un segment'] },
+  { label:'1A — Lois discrètes, équa. diff., syst. linéaires', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres:['Chap. 21 : Lois discrètes usuelles','Chap. 15 : Équ. diff. (1A)','Chap. 16 : Syst. linéaires (1A)'] },
+  { label:'1A — Espaces vectoriels, appli. linéaires, graphes', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres:['Chap. 18 : Espaces vectoriels (1A)','Chap. 19 : Appli. linéaires (1A)','Chap. 24 : Graphes'] },
 ];
 const CHAPITRES_MATHS_2A = [
-  { id: 'm2a_1', label: '2A — Espaces vectoriels + Suites et séries', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 1 : Espaces vectoriels', 'Chap. 2 : Compléments sur les suites et séries'] },
-  { id: 'm2a_2', label: '2A — Couples de VA discrètes + Applications linéaires', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 3 : Couples de variables aléatoires discrètes', 'Chap. 4 : Applications linéaires (2A)'] },
-  { id: 'm2a_3', label: '2A — Comparaison de fonctions + Intégrales impropres', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 5 : Comparaison de fonctions', 'Chap. 6 : Intégrales impropres'] },
-  { id: 'm2a_4', label: '2A — Matrices des appli. linéaires + VA à densité', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 7 : Représentation matricielle des appli. linéaires', 'Chap. 8 : Variables aléatoires à densité'] },
-  { id: 'm2a_5', label: '2A — Statistiques + Développements limités', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 9 : Statistiques descriptives uni. et bivariées', 'Chap. 10 : Développements limités'] },
-  { id: 'm2a_6', label: '2A — Diagonalisation + Lois à densité usuelles', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 11 : Diagonalisation des matrices', 'Chap. 12 : Lois à densité usuelles'] },
-  { id: 'm2a_7', label: '2A — Fonctions 2 variables + Convergence des VA', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 13 : Fonctions de deux variables', 'Chap. 14 : Convergence de suites de VA'] },
-  { id: 'm2a_8', label: '2A — Équations différentielles + Estimateurs', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 15 : Équations diff. et systèmes différentiels', 'Chap. 16 : Estimateurs et intervalles de confiance'] },
-  { id: 'm2a_9', label: '2A — Chaînes de Markov + Révision globale', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 17 : Chaînes de Markov', 'Révision générale 2A : questions de cours'] },
+  { label:'2A — Espaces vectoriels + Suites et séries', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres:['Chap. 1 : Espaces vectoriels','Chap. 2 : Compléments suites et séries'] },
+  { label:'2A — Couples VA discrètes + Appli. linéaires', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres:['Chap. 3 : Couples VA discrètes','Chap. 4 : Applications linéaires (2A)'] },
+  { label:'2A — Comparaison fonctions + Intégrales impropres', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres:['Chap. 5 : Comparaison de fonctions','Chap. 6 : Intégrales impropres'] },
+  { label:'2A — Matrices appli. linéaires + VA à densité', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres:['Chap. 7 : Représentation matricielle','Chap. 8 : VA à densité'] },
+  { label:'2A — Statistiques + Développements limités', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres:['Chap. 9 : Statistiques uni. et bivariées','Chap. 10 : Développements limités'] },
+  { label:'2A — Diagonalisation + Lois à densité usuelles', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres:['Chap. 11 : Diagonalisation','Chap. 12 : Lois à densité usuelles'] },
+  { label:'2A — Fonctions 2 variables + Convergence VA', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres:['Chap. 13 : Fonctions de deux variables','Chap. 14 : Convergence VA'] },
+  { label:'2A — Équa. diff. + Estimateurs', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres:['Chap. 15 : Équ. diff. et syst. diff.','Chap. 16 : Estimateurs et IC'] },
+  { label:'2A — Chaînes de Markov + Révision générale', url:'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres:['Chap. 17 : Chaînes de Markov','Révision générale 2A : questions de cours'] },
 ];
-
 const ALL_MATHS = [...CHAPITRES_MATHS_1A, ...CHAPITRES_MATHS_2A];
 
-// ═══════════════════════════════════════════════════════
-// PLANNING JOUR PAR JOUR
-// Semaine 1 : début 8h, dîner 18h (45min), fin ~22h30
-// Semaine 2 : début 9h, dîner 21h30 (45min), fin ~23h30
-// Déjeuner : 1h (30min repas + 30min sieste), à 13h s1 / 13h30 s2
-// ESH le matin (meilleur moment), Maths après déjeuner
-// Chaque jour : 3h ESH cours + 30min sujet ESH + 1h anglais + 1h italien + 1h30 philo + 3h maths (2h exercices + 1h cours) + 35min anki
-// Total matières = 10h35 → s'étale sur la journée
-// ═══════════════════════════════════════════════════════
+// Durées en minutes par matière (pour stats)
+const MAT_DUREES = { ESH:210, Maths:180, Anglais:60, Italien:60, Philo:90, Anki:35, pause:0, custom:60 };
+const MAT_COLORS = { ESH:'var(--caramel)', Maths:'var(--green)', Anglais:'var(--blue)', Italien:'#6A8BAA', Philo:'var(--purple)', Anki:'var(--gold)', pause:'var(--tan)', custom:'var(--brown-light)' };
 
-const JOURS = [
-  // ── DIMANCHE 6 AVRIL (J1 — S1 — début 8h) ──
-  {
-    id: 'j1', date: 6, mois: 'avril', jour: 'Dimanche', semaine: 1,
-    note: 'Premier jour de révisions — installe ton rythme calmement.',
-    mathsIdx: 0,
-    taches: [
-      { id: 't_j1_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'HPE + Chap. 1 : macroéconomie, consommation, épargne', time: '8h00', dur: '3h', detail: CHAPITRES_ESH[0].detail, link: null },
-      { id: 't_j1_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Demi-heure de sujet / dissertation type concours', time: '11h00', dur: '30min', detail: ['Préparer un plan détaillé ou traiter une introduction', 'Entraînement à la problématique'], link: null },
-      { id: 't_j1_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '30min repas · 30min sieste ou pause', time: '13h00', dur: '1h', detail: [], link: null },
-      { id: 't_j1_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[0].label, time: '14h00', dur: '2h', detail: ALL_MATHS[0].chapitres, link: ALL_MATHS[0].url },
-      { id: 't_j1_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours, théorèmes, définitions', time: '16h00', dur: '1h', detail: ['Relire le cours correspondant aux exercices faits', 'Listes des questions classiques (site Légendre)'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
-      { id: 't_j1_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision de cours / notions', time: '17h00', dur: '1h30', detail: ['Révision d\'une notion ou d\'un auteur au programme', 'Relecture de corrections ou de dissertations type'], link: null },
-      { id: 't_j1_7', mat: 'pause', color: 'c-pause', name: 'Dîner', sous: '', time: '18h00', dur: '45min', detail: [], link: null },
-      { id: 't_j1_8', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocabulaire, grammaire, compréhension', time: '19h00', dur: '1h', detail: ['Vocabulaire thématique', 'Point de grammaire ou expression écrite', 'Écoute ou lecture d\'un document civilisation'], link: null },
-      { id: 't_j1_9', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocabulaire, grammaire, civilisation', time: '20h00', dur: '1h', detail: ['Vocabulaire et expressions idiomatiques', 'Grammaire (point du jour)', 'Document de civilisation italienne'], link: null },
-      { id: 't_j1_10', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour — toutes matières', time: '21h15', dur: '35min', detail: ['Passer toutes les cartes dues', 'Ajouter éventuellement les définitions apprises aujourd\'hui'], link: null },
-    ]
-  },
-  // ── LUNDI 7 AVRIL (J2 — S1) ──
-  {
-    id: 'j2', date: 7, mois: 'avril', jour: 'Lundi', semaine: 1,
-    mathsIdx: 1,
-    taches: [
-      { id: 't_j2_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'CPP + Défaillances du marché + Concurrence imparfaite', time: '8h00', dur: '3h', detail: CHAPITRES_ESH[1].detail, link: null },
-      { id: 't_j2_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Demi-heure de sujet type concours', time: '11h00', dur: '30min', detail: ['Traiter une introduction complète ou un plan détaillé'], link: null },
-      { id: 't_j2_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '30min repas · 30min sieste', time: '13h00', dur: '1h', detail: [], link: null },
-      { id: 't_j2_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[1].label, time: '14h00', dur: '2h', detail: ALL_MATHS[1].chapitres, link: ALL_MATHS[1].url },
-      { id: 't_j2_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions classiques + théorèmes', time: '16h00', dur: '1h', detail: ['Relire le cours', 'Questions de cours oraux HEC'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-de-cours.pdf' },
-      { id: 't_j2_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision de cours / notions', time: '17h00', dur: '1h30', detail: ['Notion au programme', 'Relecture d\'une correction'], link: null },
-      { id: 't_j2_7', mat: 'pause', color: 'c-pause', name: 'Dîner', sous: '', time: '18h00', dur: '45min', detail: [], link: null },
-      { id: 't_j2_8', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocabulaire, grammaire, civilisation', time: '19h00', dur: '1h', detail: ['Vocabulaire thématique', 'Grammaire ou expression', 'Document civilisation'], link: null },
-      { id: 't_j2_9', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab, grammaire, civilisation', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation italienne'], link: null },
-      { id: 't_j2_10', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h15', dur: '35min', detail: ['Cartes dues', 'Nouvelles définitions'], link: null },
-    ]
-  },
-  // ── MARDI 8 AVRIL ──
-  {
-    id: 'j3', date: 8, mois: 'avril', jour: 'Mardi', semaine: 1,
-    mathsIdx: 2,
-    taches: [
-      { id: 't_j3_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Concentration + Gouvernance + Sociologies des orga. et du travail', time: '8h00', dur: '3h', detail: CHAPITRES_ESH[2].detail, link: null },
-      { id: 't_j3_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '11h00', dur: '30min', detail: ['Introduction ou plan détaillé'], link: null },
-      { id: 't_j3_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h00', dur: '1h', detail: [], link: null },
-      { id: 't_j3_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[2].label, time: '14h00', dur: '2h', detail: ALL_MATHS[2].chapitres, link: ALL_MATHS[2].url },
-      { id: 't_j3_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Retour sur les points difficiles', time: '16h00', dur: '1h', detail: ['Théorèmes clés', 'Questions classiques oraux'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
-      { id: 't_j3_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions', time: '17h00', dur: '1h30', detail: ['Auteur ou notion au programme', 'Relecture correction'], link: null },
-      { id: 't_j3_7', mat: 'pause', color: 'c-pause', name: 'Dîner', sous: '', time: '18h00', dur: '45min', detail: [], link: null },
-      { id: 't_j3_8', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Entraînement compréhension + expression', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression écrite ou orale', 'Document audio/presse'], link: null },
-      { id: 't_j3_9', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab + grammaire + civilisation', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
-      { id: 't_j3_10', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h15', dur: '35min', detail: ['Toutes les cartes dues'], link: null },
-    ]
-  },
-  // ── MERCREDI 9 AVRIL ──
-  {
-    id: 'j4', date: 9, mois: 'avril', jour: 'Mercredi', semaine: 1,
-    mathsIdx: 3,
-    taches: [
-      { id: 't_j4_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Système productif + Politiques industrielle, concurrence, fiscale', time: '8h00', dur: '3h', detail: CHAPITRES_ESH[3].detail, link: null },
-      { id: 't_j4_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '11h00', dur: '30min', detail: ['Introduction ou plan détaillé'], link: null },
-      { id: 't_j4_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h00', dur: '1h', detail: [], link: null },
-      { id: 't_j4_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[3].label, time: '14h00', dur: '2h', detail: ALL_MATHS[3].chapitres, link: ALL_MATHS[3].url },
-      { id: 't_j4_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours', time: '16h00', dur: '1h', detail: ['Cours du jour', 'Exercices de vacances à refaire'], link: 'https://jeremylegendre.fr/wp-content/uploads/Exercices-de-vacances_ENONCE.pdf' },
-      { id: 't_j4_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions + auteurs', time: '17h00', dur: '1h30', detail: ['Notion ou auteur au programme', 'Correction à relire'], link: null },
-      { id: 't_j4_7', mat: 'pause', color: 'c-pause', name: 'Dîner', sous: '', time: '18h00', dur: '45min', detail: [], link: null },
-      { id: 't_j4_8', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocab + grammaire + civilisation', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Point de grammaire', 'Civilisation'], link: null },
-      { id: 't_j4_9', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab + grammaire + civilisation', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
-      { id: 't_j4_10', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h15', dur: '35min', detail: ['Toutes cartes dues'], link: null },
-    ]
-  },
-  // ── JEUDI 10 AVRIL ──
-  {
-    id: 'j5', date: 10, mois: 'avril', jour: 'Jeudi', semaine: 1,
-    mathsIdx: 4,
-    taches: [
-      { id: 't_j5_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Croissance économique + Économie du développement + Dette publique', time: '8h00', dur: '3h', detail: CHAPITRES_ESH[4].detail, link: null },
-      { id: 't_j5_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '11h00', dur: '30min', detail: ['Plan détaillé ou introduction complète'], link: null },
-      { id: 't_j5_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h00', dur: '1h', detail: [], link: null },
-      { id: 't_j5_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[4].label, time: '14h00', dur: '2h', detail: ALL_MATHS[4].chapitres, link: ALL_MATHS[4].url },
-      { id: 't_j5_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Cours + questions classiques', time: '16h00', dur: '1h', detail: ['Relire le cours', 'Questions classiques'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
-      { id: 't_j5_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions', time: '17h00', dur: '1h30', detail: ['Notion ou auteur', 'Correction à relire'], link: null },
-      { id: 't_j5_7', mat: 'pause', color: 'c-pause', name: 'Dîner', sous: '', time: '18h00', dur: '45min', detail: [], link: null },
-      { id: 't_j5_8', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Compréhension + expression', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
-      { id: 't_j5_9', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Entraînement complet', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
-      { id: 't_j5_10', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h15', dur: '35min', detail: ['Toutes cartes dues'], link: null },
-    ]
-  },
-  // ── VENDREDI 11 AVRIL — journée allégée (max 4h) ──
-  {
-    id: 'j6', date: 11, mois: 'avril', jour: 'Vendredi', semaine: 1,
-    note: '⚠️ Journée allégée — maximum 4h de travail. Profite de la pause !',
-    mathsIdx: -1,
-    taches: [
-      { id: 't_j6_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours (révision légère)', time: '10h00', dur: '30min', detail: ['Plan détaillé ou relecture d\'une correction'], link: null },
-      { id: 't_j6_2', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour — ne pas sauter !', time: '10h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
-      { id: 't_j6_3', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Lecture ou écoute légère', time: '11h15', dur: '1h', detail: ['Article ou podcast en anglais', 'Vocab léger'], link: null },
-      { id: 't_j6_4', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Relecture légère', time: '12h30', dur: '1h', detail: ['Relecture d\'une correction ou d\'une notion', 'Pas de rédaction'], link: null },
-    ]
-  },
-  // ── SAMEDI 12 AVRIL — pas de travail le matin ──
-  {
-    id: 'j7', date: 12, mois: 'avril', jour: 'Samedi', semaine: 1,
-    note: '⚠️ Pas de travail le matin. Reprise l\'après-midi si tu le souhaites.',
-    mathsIdx: -1,
-    weekend: true,
-    taches: [
-      { id: 't_j7_1', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour — à ne pas sauter', time: '14h00', dur: '35min', detail: ['Toutes cartes dues'], link: null },
-      { id: 't_j7_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Relecture légère', sous: 'Relire les chapitres de la semaine', time: '15h00', dur: '1h30', detail: ['Relecture rapide des définitions', 'Révision des problématiques vues'], link: null },
-      { id: 't_j7_3', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocabulaire léger', time: '16h30', dur: '30min', detail: ['Vocabulaire', 'Quelques expressions idiomatiques'], link: null },
-    ]
-  },
-  // ── DIMANCHE 13 AVRIL — S2, début 9h ──
-  {
-    id: 'j8', date: 13, mois: 'avril', jour: 'Dimanche', semaine: 2,
-    mathsIdx: 5,
-    taches: [
-      { id: 't_j8_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Mondialisation — Partie 1 (flux, FMN, IDE)', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[5].detail, link: null },
-      { id: 't_j8_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
-      { id: 't_j8_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '30min repas · 30min sieste', time: '13h30', dur: '1h', detail: [], link: null },
-      { id: 't_j8_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[5].label, time: '14h30', dur: '2h', detail: ALL_MATHS[5].chapitres, link: ALL_MATHS[5].url },
-      { id: 't_j8_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours', time: '16h30', dur: '1h', detail: ['Cours du jour', 'Questions classiques'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
-      { id: 't_j8_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Correction à relire'], link: null },
-      { id: 't_j8_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocab + expression + civilisation', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
-      { id: 't_j8_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab + grammaire + civ.', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
-      { id: 't_j8_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
-    ]
-  },
-  // ── LUNDI 14 AVRIL ──
-  {
-    id: 'j9', date: 14, mois: 'avril', jour: 'Lundi', semaine: 2,
-    mathsIdx: 6,
-    taches: [
-      { id: 't_j9_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Mondialisation (2/2) + Fluctuations et crises + OG-DG', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[6].detail, link: null },
-      { id: 't_j9_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
-      { id: 't_j9_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
-      { id: 't_j9_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[6].label, time: '14h30', dur: '2h', detail: ALL_MATHS[6].chapitres, link: ALL_MATHS[6].url },
-      { id: 't_j9_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours + théorèmes', time: '16h30', dur: '1h', detail: ['Cours du jour', 'Retour sur points difficiles'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-de-cours.pdf' },
-      { id: 't_j9_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions + rédaction', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Introduction rédigée'], link: null },
-      { id: 't_j9_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocab + expression + civilisation', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
-      { id: 't_j9_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab + grammaire + civ.', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
-      { id: 't_j9_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
-    ]
-  },
-  // ── MARDI 15 AVRIL ──
-  {
-    id: 'j10', date: 15, mois: 'avril', jour: 'Mardi', semaine: 2,
-    mathsIdx: 7,
-    taches: [
-      { id: 't_j10_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'SMI + GF + Inflation', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[7].detail, link: null },
-      { id: 't_j10_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
-      { id: 't_j10_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
-      { id: 't_j10_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[7].label, time: '14h30', dur: '2h', detail: ALL_MATHS[7].chapitres, link: ALL_MATHS[7].url },
-      { id: 't_j10_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours', time: '16h30', dur: '1h', detail: ['Cours du jour', 'Questions classiques'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
-      { id: 't_j10_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Correction'], link: null },
-      { id: 't_j10_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Entraînement complet', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
-      { id: 't_j10_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Entraînement complet', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
-      { id: 't_j10_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
-    ]
-  },
-  // ── MERCREDI 16 AVRIL ──
-  {
-    id: 'j11', date: 16, mois: 'avril', jour: 'Mercredi', semaine: 2,
-    mathsIdx: 8,
-    taches: [
-      { id: 't_j11_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'IS-LM + IS-LM-BP + Balance des paiements + Taux de change', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[8].detail, link: null },
-      { id: 't_j11_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
-      { id: 't_j11_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
-      { id: 't_j11_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[8].label, time: '14h30', dur: '2h', detail: ALL_MATHS[8].chapitres, link: ALL_MATHS[8].url },
-      { id: 't_j11_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Retour sur chapitres techniques', time: '16h30', dur: '1h', detail: ['Cours Markov, équadiff, estimateurs', 'Questions de cours oraux'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-de-cours.pdf' },
-      { id: 't_j11_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions + rédaction', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Introduction ou développement rédigé'], link: null },
-      { id: 't_j11_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocab + expression + civilisation', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
-      { id: 't_j11_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab + grammaire + civ.', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
-      { id: 't_j11_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
-    ]
-  },
-  // ── JEUDI 17 AVRIL ──
-  {
-    id: 'j12', date: 17, mois: 'avril', jour: 'Jeudi', semaine: 2,
-    mathsIdx: 9,
-    taches: [
-      { id: 't_j12_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Révision bloc monétaire — chapitres techniques', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[9].detail, link: null },
-      { id: 't_j12_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours (bloc monétaire)', time: '12h00', dur: '30min', detail: ['Plan ou introduction sur thème monétaire'], link: null },
-      { id: 't_j12_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
-      { id: 't_j12_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[9].label, time: '14h30', dur: '2h', detail: ALL_MATHS[9].chapitres, link: ALL_MATHS[9].url },
-      { id: 't_j12_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Révision générale', time: '16h30', dur: '1h', detail: ['Cours du jour', 'Questions classiques difficiles'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
-      { id: 't_j12_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Correction'], link: null },
-      { id: 't_j12_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Entraînement complet', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
-      { id: 't_j12_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Entraînement complet', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
-      { id: 't_j12_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
-    ]
-  },
-  // ── VENDREDI 18 AVRIL ──
-  {
-    id: 'j13', date: 18, mois: 'avril', jour: 'Vendredi', semaine: 2,
-    mathsIdx: 10,
-    taches: [
-      { id: 't_j13_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Europe + Chômage', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[10].detail, link: null },
-      { id: 't_j13_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
-      { id: 't_j13_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
-      { id: 't_j13_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[10].label, time: '14h30', dur: '2h', detail: ALL_MATHS[10].chapitres, link: ALL_MATHS[10].url },
-      { id: 't_j13_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours', time: '16h30', dur: '1h', detail: ['Cours du jour', 'Questions classiques'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
-      { id: 't_j13_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision + rédaction', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Rédiger un développement'], link: null },
-      { id: 't_j13_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Entraînement complet', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
-      { id: 't_j13_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Entraînement complet', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
-      { id: 't_j13_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
-    ]
-  },
-  // ── SAMEDI 19 AVRIL — dimanche, salle fermée, moins intense ──
-  {
-    id: 'j14', date: 19, mois: 'avril', jour: 'Samedi', semaine: 2,
-    note: '⚠️ Salle de travail fermée — journée moins intense, travaille depuis chez toi.',
-    weekend: true,
-    mathsIdx: 11,
-    taches: [
-      { id: 't_j14_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Politique de l\'emploi + Révision chômage technique', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[11].detail, link: null },
-      { id: 't_j14_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
-      { id: 't_j14_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
-      { id: 't_j14_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[11].label, time: '14h30', dur: '2h', detail: ALL_MATHS[11].chapitres, link: ALL_MATHS[11].url },
-      { id: 't_j14_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Révision allégée', time: '16h30', dur: '1h', detail: ['Cours léger', 'Questions classiques'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
-      { id: 't_j14_6', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocabulaire + lecture', time: '17h30', dur: '1h', detail: ['Vocabulaire', 'Lecture article de presse'], link: null },
-      { id: 't_j14_7', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour — ne pas sauter', time: '18h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
-    ]
-  },
-  // ── DIMANCHE 20 AVRIL — dernier jour ──
-  {
-    id: 'j15', date: 20, mois: 'avril', jour: 'Dimanche', semaine: 2,
-    note: '🏁 Dernier jour de révisions — révision de synthèse et méthodes.',
-    mathsIdx: 12,
-    taches: [
-      { id: 't_j15_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Démographie + Politiques sociales + Structure sociale + Mobilité', time: '9h00', dur: '3h', detail: [...CHAPITRES_ESH[12].detail, ...CHAPITRES_ESH[13].detail], link: null },
-      { id: 't_j15_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours — entraînement final', time: '12h00', dur: '30min', detail: ['Plan ou introduction complète'], link: null },
-      { id: 't_j15_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
-      { id: 't_j15_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[12] ? ALL_MATHS[12].label : '2A — Révision annales concours', time: '14h30', dur: '2h', detail: ALL_MATHS[12] ? ALL_MATHS[12].chapitres : ['Annales BCE/Ecricome', 'Exercices type concours toutes thématiques'], link: 'https://jeremylegendre.fr/annales-concours-bce-ecricome/' },
-      { id: 't_j15_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours finale', sous: 'Révision de synthèse', time: '16h30', dur: '1h', detail: ['Questions de cours complètes', 'Points faibles identifiés'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-de-cours.pdf' },
-      { id: 't_j15_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision finale + méthode', time: '17h30', dur: '1h30', detail: ['Révision des notions clés', 'Relecture méthode de la dissertation'], link: null },
-      { id: 't_j15_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Révision finale', time: '19h00', dur: '1h', detail: ['Vocabulaire prioritaire', 'Relecture méthode'], link: null },
-      { id: 't_j15_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Révision finale', time: '20h00', dur: '1h', detail: ['Vocabulaire prioritaire', 'Grammaire clé', 'Méthode'], link: null },
-      { id: 't_j15_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour — dernière session !', time: '21h30', dur: '35min', detail: ['Toutes cartes dues', 'Bien mémoriser !'], link: null },
-    ]
-  },
+// ════════════════════════════════════════════════
+// PLANNING DATA (généré programmatiquement)
+// ════════════════════════════════════════════════
+function mkTache(id, mat, name, sous, time, dur, durMins, detail, link) {
+  const matColors = { ESH:'c-esh', Maths:'c-maths', Anglais:'c-anglais', Italien:'c-italien', Philo:'c-philo', Anki:'c-anki', pause:'c-pause', custom:'c-custom' };
+  return { id, mat, color: matColors[mat]||'c-custom', name, sous, time, dur, durMins, detail: detail||[], link: link||null };
+}
+function pauseBlock(id, name, sous, time, dur) {
+  return { id, mat:'pause', color:'c-pause', name, sous, time, dur, durMins:0, detail:[], link:null };
+}
+
+const JOURS_BASE = [
+  { id:'j1', date:6, mois:'avril', jour:'Dimanche', semaine:1, mathsIdx:0 },
+  { id:'j2', date:7, mois:'avril', jour:'Lundi', semaine:1, mathsIdx:1 },
+  { id:'j3', date:8, mois:'avril', jour:'Mardi', semaine:1, mathsIdx:2 },
+  { id:'j4', date:9, mois:'avril', jour:'Mercredi', semaine:1, mathsIdx:3 },
+  { id:'j5', date:10, mois:'avril', jour:'Jeudi', semaine:1, mathsIdx:4 },
+  { id:'j6', date:11, mois:'avril', jour:'Vendredi', semaine:1, mathsIdx:-1, note:'⚠️ Journée allégée — maximum 4h. Profite de la pause !', light:true },
+  { id:'j7', date:12, mois:'avril', jour:'Samedi', semaine:1, mathsIdx:-1, note:"⚠️ Pas de travail le matin. Reprise l'après-midi seulement.", weekend:true },
+  { id:'j8', date:13, mois:'avril', jour:'Dimanche', semaine:2, mathsIdx:5 },
+  { id:'j9', date:14, mois:'avril', jour:'Lundi', semaine:2, mathsIdx:6 },
+  { id:'j10', date:15, mois:'avril', jour:'Mardi', semaine:2, mathsIdx:7 },
+  { id:'j11', date:16, mois:'avril', jour:'Mercredi', semaine:2, mathsIdx:8 },
+  { id:'j12', date:17, mois:'avril', jour:'Jeudi', semaine:2, mathsIdx:9 },
+  { id:'j13', date:18, mois:'avril', jour:'Vendredi', semaine:2, mathsIdx:10 },
+  { id:'j14', date:19, mois:'avril', jour:'Samedi', semaine:2, mathsIdx:11, note:'⚠️ Salle de travail fermée — journée moins intense.', weekend:true },
+  { id:'j15', date:20, mois:'avril', jour:'Dimanche', semaine:2, mathsIdx:12, note:'🏁 Dernier jour — révision de synthèse et méthodes.' },
 ];
 
-// ═══════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════
-let state = {};
-const STORAGE_KEY = 'planning_revision_2026';
+const ESH_LABELS = [
+  'HPE + Chap. 1 : macro, consommation, épargne',
+  'CPP + Défaillances du marché + Concurrence imparfaite',
+  'Concentration + Gouvernance + Sociologie orga. et travail',
+  'Système productif + Politiques industrielle, concurrence, fiscale',
+  'Croissance économique + Éco. du développement + Dette publique',
+  'Mondialisation — Partie 1 (flux, FMN, IDE)',
+  'Mondialisation (2/2) + Fluctuations et crises + OG-DG',
+  'Monnaie + Balance des paiements + Taux de change',
+  'IS-LM + IS-LM-BP + SMI + GF + Inflation',
+  'Révision bloc monétaire (chapitres techniques)',
+  'Europe + Chômage',
+  "Politique de l'emploi + Révision chômage technique",
+  'Démographie + Politiques sociales + Structure sociale + Mobilité',
+  'Révision de synthèse finale — tous chapitres',
+];
 
-function loadState() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    state = saved ? JSON.parse(saved) : {};
-  } catch(e) { state = {}; }
+function buildTachesForJour(j, eshIdx) {
+  const s1 = j.semaine === 1;
+  const dej = s1 ? '13h00' : '13h30';
+  const din = s1 ? '18h00' : '21h30';
+  const esh_start = s1 ? '8h00' : '9h00';
+  const math_start = s1 ? '14h00' : '14h30';
+  const philo_start = s1 ? '17h00' : '17h30';
+  const ang_start = s1 ? '19h00' : '19h00';
+  const ita_start = s1 ? '20h00' : '20h00';
+  const anki_start = s1 ? '21h15' : '21h30';
+
+  if (j.light) return [
+    mkTache(`t_${j.id}_1`,'ESH','ESH — Sujet','Sujet type concours (révision légère)','10h00','30min',30,['Plan détaillé ou relecture d\'une correction'],null),
+    mkTache(`t_${j.id}_2`,'Anki','Anki','Cartes du jour — ne pas sauter !','10h30','35min',35,['Toutes cartes dues'],null),
+    mkTache(`t_${j.id}_3`,'Anglais','Anglais','Lecture ou écoute légère','11h15','1h',60,['Article ou podcast en anglais','Vocab léger'],null),
+    mkTache(`t_${j.id}_4`,'Philo','Philosophie','Relecture légère','12h30','1h',60,['Relecture d\'une correction ou d\'une notion','Pas de rédaction'],null),
+  ];
+  if (j.weekend && j.date === 12) return [
+    mkTache(`t_${j.id}_1`,'Anki','Anki','Cartes du jour — à ne pas sauter','14h00','35min',35,['Toutes cartes dues'],null),
+    mkTache(`t_${j.id}_2`,'ESH','ESH — Relecture légère','Relire les chapitres de la semaine','15h00','1h30',90,['Relecture rapide des définitions','Révision des problématiques vues'],null),
+    mkTache(`t_${j.id}_3`,'Italien','Italien','Vocabulaire léger','16h30','30min',30,['Vocabulaire','Quelques expressions idiomatiques'],null),
+  ];
+
+  const mx = j.mathsIdx >= 0 ? ALL_MATHS[j.mathsIdx] : null;
+  const esh = CHAPITRES_ESH[eshIdx];
+
+  const taches = [
+    mkTache(`t_${j.id}_1`,'ESH','ESH — Cours', ESH_LABELS[eshIdx] || 'Révision ESH', esh_start,'3h',180, esh ? esh.detail : [], null),
+    mkTache(`t_${j.id}_2`,'ESH','ESH — Sujet','Demi-heure de sujet type concours', s1?'11h00':'12h00','30min',30,['Plan détaillé ou introduction complète'],null),
+    pauseBlock(`t_${j.id}_p1`,'Déjeuner + sieste','30min repas · 30min sieste',dej,'1h'),
+    mx ? mkTache(`t_${j.id}_4`,'Maths','Maths — 2 exercices concours', mx.label, math_start,'2h',120, mx.chapitres, mx.url) : null,
+    mx ? mkTache(`t_${j.id}_5`,'Maths','Maths — Révision de cours','Questions de cours, théorèmes, définitions', s1?'16h00':'16h30','1h',60,['Relire le cours correspondant','Questions classiques Légendre'],'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf') : null,
+    mkTache(`t_${j.id}_6`,'Philo','Philosophie','Révision notions + auteurs', philo_start,'1h30',90,['Notion ou auteur au programme','Relecture de corrections'],null),
+    pauseBlock(`t_${j.id}_p2`,'Dîner','',din,'45min'),
+    mkTache(`t_${j.id}_7`,'Anglais','Anglais','Vocabulaire, grammaire, civilisation', ang_start,'1h',60,['Vocabulaire thématique','Point de grammaire ou expression','Document civilisation'],null),
+    mkTache(`t_${j.id}_8`,'Italien','Italien','Vocabulaire, grammaire, civilisation', ita_start,'1h',60,['Vocabulaire et expressions','Grammaire (point du jour)','Civilisation italienne'],null),
+    mkTache(`t_${j.id}_9`,'Anki','Anki','Cartes du jour — toutes matières', anki_start,'35min',35,['Passer toutes les cartes dues','Ajouter définitions apprises aujourd\'hui'],null),
+  ].filter(Boolean);
+
+  // Jour 19 allégé
+  if (j.weekend && j.date === 19) {
+    return taches.filter(t => !['t_j14_6','t_j14_8'].includes(t.id));
+  }
+  return taches;
 }
-function saveState() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+
+// Construire JOURS avec les tâches
+let eshIdx = 0;
+const JOURS = JOURS_BASE.map(jb => {
+  const j = { ...jb, taches: [] };
+  j.taches = buildTachesForJour(j, eshIdx);
+  if (!jb.light && !jb.weekend) eshIdx = Math.min(eshIdx + 1, ESH_LABELS.length - 1);
+  if (jb.weekend && jb.date === 19) eshIdx = Math.min(eshIdx + 1, ESH_LABELS.length - 1);
+  return j;
+});
+
+// ════════════════════════════════════════════════
+// STATE (localStorage)
+// ════════════════════════════════════════════════
+const STORAGE_KEY = 'planning_revision_2026';
+const RETARD_KEY = 'planning_retard_2026';
+const CUSTOM_KEY = 'planning_custom_2026';
+let state = {}, retardState = {}, customTaches = {};
+
+function loadAll() {
+  try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); } catch(e){state={};}
+  try { retardState = JSON.parse(localStorage.getItem(RETARD_KEY)||'{}'); } catch(e){retardState={};}
+  try { customTaches = JSON.parse(localStorage.getItem(CUSTOM_KEY)||'{}'); } catch(e){customTaches={};}
 }
+function saveState() { try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){} }
+function saveRetard() { try{localStorage.setItem(RETARD_KEY,JSON.stringify(retardState));}catch(e){} }
+function saveCustom() { try{localStorage.setItem(CUSTOM_KEY,JSON.stringify(customTaches));}catch(e){} }
 function isChecked(id) { return !!state[id]; }
+function getRetard(jid) { return retardState[jid]||{taches:[],note:''}; }
+function getCustomTaches(jid) { return customTaches[jid]||[]; }
+
+function getAllTaches(j) {
+  return [...j.taches, ...getCustomTaches(j.id)];
+}
+
 function toggleCheck(id) {
+  const wasChecked = state[id];
   state[id] = !state[id];
   saveState();
+  const prevDayPct = currentJourId ? getDayPct(JOURS.find(x=>x.id===currentJourId)) : 0;
+  updateAll();
+  if (!wasChecked && currentJourId) {
+    const j = JOURS.find(x=>x.id===currentJourId);
+    const newPct = getDayPct(j);
+    if (newPct === 100 && prevDayPct < 100) {
+      launchConfetti();
+      sendNotif('🔥 Journée complète !', `${j.jour} ${j.date} avril — tout coché. Goggins serait fier.`);
+    }
+  }
+}
+
+function getDayPct(j) {
+  const all = getAllTaches(j).filter(t => t.mat !== 'pause');
+  if (!all.length) return 0;
+  return Math.round(all.filter(t => isChecked(t.id)).length / all.length * 100);
+}
+
+// ════════════════════════════════════════════════
+// TIMERS
+// ════════════════════════════════════════════════
+const timers = {}; // {tacheId: {remaining, total, interval, running}}
+
+function startTimer(tacheId, durMins) {
+  if (!durMins) return;
+  if (!timers[tacheId]) timers[tacheId] = { remaining: durMins*60, total: durMins*60, running: false, interval: null };
+  const t = timers[tacheId];
+  if (t.running) return;
+  t.running = true;
+  t.interval = setInterval(() => {
+    t.remaining--;
+    updateTimerUI(tacheId);
+    if (t.remaining <= 0) {
+      clearInterval(t.interval);
+      t.running = false;
+      t.remaining = 0;
+      updateTimerUI(tacheId);
+      sendNotif('⏱ Temps écoulé !', `La tâche est terminée. Coche-la et passe à la suite.`);
+    }
+  }, 1000);
+  updateTimerUI(tacheId);
+}
+
+function pauseTimer(tacheId) {
+  const t = timers[tacheId];
+  if (!t) return;
+  clearInterval(t.interval);
+  t.running = false;
+  updateTimerUI(tacheId);
+}
+
+function resetTimer(tacheId, durMins) {
+  if (timers[tacheId]) { clearInterval(timers[tacheId].interval); }
+  timers[tacheId] = { remaining: durMins*60, total: durMins*60, running: false, interval: null };
+  updateTimerUI(tacheId);
+}
+
+function fmtTime(secs) {
+  const m = Math.floor(secs/60), s = secs%60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function updateTimerUI(tacheId) {
+  const el = document.getElementById(`timer-display-${tacheId}`);
+  const bar = document.getElementById(`timer-bar-${tacheId}`);
+  const startBtn = document.getElementById(`timer-start-${tacheId}`);
+  if (!el) return;
+  const t = timers[tacheId];
+  if (!t) return;
+  el.textContent = fmtTime(t.remaining);
+  el.className = 'timer-display' + (t.running ? ' running' : t.remaining === 0 ? ' ended' : '');
+  const pct = t.total > 0 ? Math.round((1 - t.remaining/t.total)*100) : 0;
+  if (bar) bar.style.width = pct + '%';
+  if (startBtn) { startBtn.textContent = t.running ? '⏸' : '▶'; startBtn.classList.toggle('active', t.running); }
+}
+
+// ════════════════════════════════════════════════
+// DRAG & DROP
+// ════════════════════════════════════════════════
+let dragSrcId = null, dragJourId = null;
+
+function onDragStart(e, tacheId, jourId) {
+  dragSrcId = tacheId; dragJourId = jourId;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onDragOver(e, tacheId, jourId) {
+  e.preventDefault();
+  if (tacheId === dragSrcId) return;
+  document.querySelectorAll('.planning-line').forEach(el => el.classList.remove('drag-over'));
+  e.currentTarget.classList.add('drag-over');
+}
+function onDrop(e, tacheId, jourId) {
+  e.preventDefault();
+  if (tacheId === dragSrcId || jourId !== dragJourId) return;
+  const j = JOURS.find(x=>x.id===jourId);
+  const allT = j.taches;
+  const srcIdx = allT.findIndex(t=>t.id===dragSrcId);
+  const dstIdx = allT.findIndex(t=>t.id===tacheId);
+  if (srcIdx < 0 || dstIdx < 0) return;
+  const [moved] = allT.splice(srcIdx,1);
+  allT.splice(dstIdx,0,moved);
+  document.querySelectorAll('.planning-line').forEach(el => { el.classList.remove('drag-over'); el.classList.remove('dragging'); });
+  ouvrirDetail(jourId);
+}
+function onDragEnd(e) {
+  document.querySelectorAll('.planning-line').forEach(el => { el.classList.remove('drag-over'); el.classList.remove('dragging'); });
+}
+
+// ════════════════════════════════════════════════
+// MODAL EDIT / ADD TACHE
+// ════════════════════════════════════════════════
+let isNewTache = false;
+
+function openEditModal(jourId, tacheId) {
+  isNewTache = false;
+  const j = JOURS.find(x=>x.id===jourId);
+  const allT = [...j.taches, ...getCustomTaches(jourId)];
+  const t = allT.find(x=>x.id===tacheId);
+  if (!t) return;
+  document.getElementById('modal-title').textContent = 'Modifier la tâche';
+  document.getElementById('modal-jour-id').value = jourId;
+  document.getElementById('modal-tache-id').value = tacheId;
+  document.getElementById('modal-name').value = t.name;
+  document.getElementById('modal-sous').value = t.sous || '';
+  document.getElementById('modal-time').value = t.time || '';
+  document.getElementById('modal-dur').value = t.dur || '';
+  document.getElementById('modal-mins').value = t.durMins || '';
+  document.getElementById('modal-mat').value = t.mat || 'custom';
+  document.getElementById('modal-details').value = (t.detail||[]).join('\n');
+  document.getElementById('modal-link').value = t.link || '';
+  document.getElementById('modal-delete-btn').style.display = 'block';
+  document.getElementById('modal-edit').classList.add('open');
+}
+
+function openAddTacheModal() {
+  if (!currentJourId) return;
+  isNewTache = true;
+  document.getElementById('modal-title').textContent = 'Ajouter une tâche';
+  document.getElementById('modal-jour-id').value = currentJourId;
+  document.getElementById('modal-tache-id').value = '';
+  document.getElementById('modal-name').value = '';
+  document.getElementById('modal-sous').value = '';
+  document.getElementById('modal-time').value = '';
+  document.getElementById('modal-dur').value = '';
+  document.getElementById('modal-mins').value = '';
+  document.getElementById('modal-mat').value = 'custom';
+  document.getElementById('modal-details').value = '';
+  document.getElementById('modal-link').value = '';
+  document.getElementById('modal-delete-btn').style.display = 'none';
+  document.getElementById('modal-edit').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal-edit').classList.remove('open'); }
+
+function saveTache() {
+  const jourId = document.getElementById('modal-jour-id').value;
+  const tacheId = document.getElementById('modal-tache-id').value;
+  const mat = document.getElementById('modal-mat').value;
+  const matColors = { ESH:'c-esh', Maths:'c-maths', Anglais:'c-anglais', Italien:'c-italien', Philo:'c-philo', Anki:'c-anki', pause:'c-pause', custom:'c-custom' };
+  const newData = {
+    id: isNewTache ? `custom_${jourId}_${Date.now()}` : tacheId,
+    mat, color: matColors[mat]||'c-custom',
+    name: document.getElementById('modal-name').value || 'Tâche',
+    sous: document.getElementById('modal-sous').value,
+    time: document.getElementById('modal-time').value,
+    dur: document.getElementById('modal-dur').value,
+    durMins: parseInt(document.getElementById('modal-mins').value)||0,
+    detail: document.getElementById('modal-details').value.split('\n').filter(Boolean),
+    link: document.getElementById('modal-link').value || null,
+  };
+  if (isNewTache) {
+    if (!customTaches[jourId]) customTaches[jourId] = [];
+    customTaches[jourId].push(newData);
+    saveCustom();
+  } else {
+    const j = JOURS.find(x=>x.id===jourId);
+    const baseIdx = j.taches.findIndex(t=>t.id===tacheId);
+    if (baseIdx >= 0) { j.taches[baseIdx] = newData; }
+    else {
+      if (!customTaches[jourId]) customTaches[jourId] = [];
+      const ci = customTaches[jourId].findIndex(t=>t.id===tacheId);
+      if (ci >= 0) customTaches[jourId][ci] = newData;
+      saveCustom();
+    }
+  }
+  closeModal();
+  ouvrirDetail(jourId);
   updateAll();
 }
 
-// ── RETARD STATE ──
-const RETARD_KEY = 'planning_retard_2026';
-let retardState = {};
+function deleteTache() {
+  const jourId = document.getElementById('modal-jour-id').value;
+  const tacheId = document.getElementById('modal-tache-id').value;
+  const j = JOURS.find(x=>x.id===jourId);
+  j.taches = j.taches.filter(t=>t.id!==tacheId);
+  if (customTaches[jourId]) customTaches[jourId] = customTaches[jourId].filter(t=>t.id!==tacheId);
+  saveCustom();
+  closeModal();
+  ouvrirDetail(jourId);
+  updateAll();
+}
 
-function loadRetard() {
-  try {
-    const saved = localStorage.getItem(RETARD_KEY);
-    retardState = saved ? JSON.parse(saved) : {};
-  } catch(e) { retardState = {}; }
-}
-function saveRetard() {
-  try { localStorage.setItem(RETARD_KEY, JSON.stringify(retardState)); } catch(e) {}
-}
-function getRetard(jourId) {
-  return retardState[jourId] || { taches: [], note: '' };
-}
+// Retard
 function toggleRetardTache(jourId, tacheId) {
-  if (!retardState[jourId]) retardState[jourId] = { taches: [], note: '' };
+  if (!retardState[jourId]) retardState[jourId] = {taches:[],note:''};
   const arr = retardState[jourId].taches;
   const idx = arr.indexOf(tacheId);
-  if (idx >= 0) arr.splice(idx, 1);
-  else arr.push(tacheId);
+  if (idx >= 0) arr.splice(idx,1); else arr.push(tacheId);
   saveRetard();
-  // Update UI
-  const btn = document.getElementById('rcheck-' + tacheId);
+  const btn = document.getElementById('rcheck-'+tacheId);
   if (btn) btn.classList.toggle('reported', arr.includes(tacheId));
   buildGrids();
 }
 function saveRetardNote(jourId) {
-  if (!retardState[jourId]) retardState[jourId] = { taches: [], note: '' };
-  const ta = document.getElementById('retard-note-' + jourId);
+  if (!retardState[jourId]) retardState[jourId]={taches:[],note:''};
+  const ta = document.getElementById('retard-note-'+jourId);
   if (ta) retardState[jourId].note = ta.value;
-  saveRetard();
-  buildGrids();
-  // Visual feedback
+  saveRetard(); buildGrids();
   const btn = document.querySelector(`[onclick="saveRetardNote('${jourId}')"]`);
-  if (btn) { btn.textContent = '✓ Enregistré'; setTimeout(() => { btn.textContent = 'Enregistrer la note'; }, 1500); }
+  if (btn) { btn.textContent='✓ Enregistré'; setTimeout(()=>btn.textContent='Enregistrer',1500); }
 }
 
-// ═══════════════════════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════════════════════
-const JOURS_NOM = ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'];
+// ════════════════════════════════════════════════
+// STREAK
+// ════════════════════════════════════════════════
+function calcStreak() {
+  let streak = 0;
+  const today = new Date();
+  for (let i = JOURS.length-1; i >= 0; i--) {
+    const j = JOURS[i];
+    const jDate = new Date(2026, 3, j.date);
+    if (jDate > today) continue;
+    if (getDayPct(j) === 100) streak++;
+    else break;
+  }
+  return streak;
+}
 
+// ════════════════════════════════════════════════
+// CONFETTIS
+// ════════════════════════════════════════════════
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const particles = Array.from({length:120}, () => ({
+    x: Math.random()*canvas.width, y: Math.random()*canvas.height - canvas.height,
+    r: Math.random()*6+4, d: Math.random()*10+4,
+    color: ['#C4A882','#6A8B5A','#7A5A8A','#C49A3C','#4A6B8A','#FAF7F2'][Math.floor(Math.random()*6)],
+    tilt: Math.random()*10-10, tiltAngle: 0, tiltSpeed: Math.random()*0.1+0.05,
+  }));
+  let frame = 0;
+  const animate = () => {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p => {
+      p.tiltAngle += p.tiltSpeed;
+      p.y += (Math.cos(frame/20+p.d)+1.2);
+      p.x += Math.sin(frame/20);
+      p.tilt = Math.sin(p.tiltAngle)*15;
+      ctx.beginPath(); ctx.lineWidth = p.r;
+      ctx.strokeStyle = p.color;
+      ctx.moveTo(p.x+p.tilt+p.r/2, p.y);
+      ctx.lineTo(p.x+p.tilt, p.y+p.tilt+p.r/2);
+      ctx.stroke();
+    });
+    frame++;
+    if (frame < 180) requestAnimationFrame(animate);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  };
+  animate();
+}
+
+// ════════════════════════════════════════════════
+// RENDER GRIDS
+// ════════════════════════════════════════════════
 function buildGrids() {
-  const s1 = document.getElementById('grid-s1');
-  const s2 = document.getElementById('grid-s2');
-  s1.innerHTML = '';
-  s2.innerHTML = '';
-
-  JOURS.forEach((j, idx) => {
-    const el = document.createElement('div');
-    el.className = 'jour-mini' + (j.weekend ? ' weekend' : '');
-    el.id = 'mini-' + j.id;
-    el.onclick = () => ouvrirDetail(j.id);
-
-    const tachesActives = j.taches.filter(t => t.mat !== 'pause');
-    const done = tachesActives.filter(t => isChecked(t.id)).length;
-    const pct = tachesActives.length > 0 ? Math.round(done / tachesActives.length * 100) : 0;
-
-    const shortDay = j.jour.substring(0, 3).toLowerCase();
-    const dayMap = {'dim':'Dim.','lun':'Lun.','mar':'Mar.','mer':'Mer.','jeu':'Jeu.','ven':'Ven.','sam':'Sam.'};
-
-    const retardData = getRetard(j.id);
-    const hasRetard = (retardData.taches && retardData.taches.length > 0) || retardData.note;
-
-    el.innerHTML = `
-      <div class="jm-retard"></div>
-      <span class="jm-label">${dayMap[shortDay] || j.jour.substring(0,3)}</span>
-      <span class="jm-date">${j.date}</span>
-      <div class="jm-progress"><div class="jm-bar" style="width:${pct}%"></div></div>
-      <div class="jm-check"></div>
-    `;
-    if (pct === 100) el.classList.add('complet');
-    if (hasRetard) el.classList.add('has-retard');
-
-    (j.semaine === 1 ? s1 : s2).appendChild(el);
+  ['s1','s2'].forEach(sid => {
+    const el = document.getElementById('grid-'+sid);
+    el.innerHTML = '';
+    const sem = sid === 's1' ? 1 : 2;
+    JOURS.filter(j=>j.semaine===sem).forEach(j => {
+      const div = document.createElement('div');
+      const pct = getDayPct(j);
+      const retardData = getRetard(j.id);
+      const hasRetard = (retardData.taches&&retardData.taches.length>0)||retardData.note;
+      const dayMap = {'dim':'Dim.','lun':'Lun.','mar':'Mar.','mer':'Mer.','jeu':'Jeu.','ven':'Ven.','sam':'Sam.'};
+      const key = j.jour.substring(0,3).toLowerCase();
+      div.className = 'jour-mini'+(j.weekend?' weekend':'')+(pct===100?' complet':'')+(hasRetard?' has-retard':'');
+      div.id = 'mini-'+j.id;
+      div.onclick = () => ouvrirDetail(j.id);
+      div.innerHTML = `<div class="jm-retard"></div><span class="jm-label">${dayMap[key]||key}</span><span class="jm-date">${j.date}</span><div class="jm-progress"><div class="jm-bar" style="width:${pct}%"></div></div><div class="jm-check"></div>`;
+      el.appendChild(div);
+    });
   });
 }
 
+// ════════════════════════════════════════════════
+// RENDER DETAIL
+// ════════════════════════════════════════════════
 let currentJourId = null;
 
 function ouvrirDetail(jourId) {
-  const j = JOURS.find(x => x.id === jourId);
+  const j = JOURS.find(x=>x.id===jourId);
   if (!j) return;
   currentJourId = jourId;
 
-  // Mark active
-  document.querySelectorAll('.jour-mini').forEach(el => el.classList.remove('active'));
-  const mini = document.getElementById('mini-' + jourId);
+  document.querySelectorAll('.jour-mini').forEach(el=>el.classList.remove('active'));
+  const mini = document.getElementById('mini-'+jourId);
   if (mini) mini.classList.add('active');
 
-  // Titre
   document.getElementById('detail-titre').innerHTML = `${j.jour} ${j.date} ${j.mois}`;
+  const heureDebut = j.semaine===1 ? '8h00' : '9h00';
+  document.getElementById('detail-badges').innerHTML =
+    `<span class="badge badge-week">Semaine ${j.semaine}</span><span class="badge badge-hours">Début ${heureDebut}</span>`;
 
-  // Badges
-  const badges = document.getElementById('detail-badges');
-  const semLabel = j.semaine === 1 ? 'Semaine 1' : 'Semaine 2';
-  const heureDebut = j.semaine === 1 ? '8h00' : '9h00';
-  badges.innerHTML = `<span class="badge badge-week">${semLabel}</span><span class="badge badge-hours">Début ${heureDebut}</span>`;
-
-  // Note spéciale
+  // Notes + bandeau report
   const noteEl = document.getElementById('detail-note');
   let noteHTML = '';
   if (j.note) noteHTML += `<div class="note-special">${j.note}</div>`;
-
-  // Bandeau report du jour précédent
-  const jIdx = JOURS.findIndex(x => x.id === jourId);
+  const jIdx = JOURS.findIndex(x=>x.id===jourId);
   if (jIdx > 0) {
-    const prevJ = JOURS[jIdx - 1];
-    const prevRetard = getRetard(prevJ.id);
-    const prevTaches = (prevRetard.taches || []);
-    const prevNote = prevRetard.note || '';
-    if (prevTaches.length > 0 || prevNote) {
-      noteHTML += `<div class="report-bandeau">
-        <div class="report-bandeau-titre">↩ À rattraper depuis ${prevJ.jour} ${prevJ.date} ${prevJ.mois}</div>
-        ${prevTaches.map(tid => {
-          const t = prevJ.taches.find(x => x.id === tid);
-          return t ? `<div class="report-item">${t.name}${t.sous ? ' <span style="color:var(--brown-light);font-size:0.72rem;">— ' + t.sous + '</span>' : ''}</div>` : '';
-        }).join('')}
-        ${prevNote ? `<div class="report-note-txt">${prevNote}</div>` : ''}
+    const pj = JOURS[jIdx-1];
+    const pr = getRetard(pj.id);
+    const prT = pr.taches||[];
+    if (prT.length > 0 || pr.note) {
+      noteHTML += `<div class="report-bandeau"><div class="report-bandeau-titre">↩ À rattraper depuis ${pj.jour} ${pj.date} ${pj.mois}</div>
+        ${prT.map(tid=>{const t=getAllTaches(pj).find(x=>x.id===tid);return t?`<div class="report-item">${t.name}${t.sous?' <span style="color:var(--text2);font-size:0.72rem;">— '+t.sous+'</span>':''}</div>`:''}).join('')}
+        ${pr.note?`<div class="report-note-txt">${pr.note}</div>`:''}
       </div>`;
     }
   }
@@ -1125,10 +1029,10 @@ function ouvrirDetail(jourId) {
   // Tâches
   const container = document.getElementById('detail-taches');
   container.innerHTML = '';
-
+  const allT = getAllTaches(j);
   let lastMat = null;
-  j.taches.forEach((t, ti) => {
-    // Séparateur si changement de bloc
+
+  allT.forEach(t => {
     if (t.mat !== lastMat && t.mat !== 'pause') {
       if (lastMat !== null && lastMat !== 'pause') {
         const sep = document.createElement('div');
@@ -1142,177 +1046,187 @@ function ouvrirDetail(jourId) {
     const checked = isChecked(t.id);
     const isPause = t.mat === 'pause';
     const hasDetail = t.detail && t.detail.length > 0;
+    const hasDurMins = t.durMins > 0;
 
     const line = document.createElement('div');
-    line.className = 'planning-line' + (checked && !isPause ? ' done' : '') + (isPause ? ' pause-line' : '');
-    line.id = 'line-' + t.id;
+    line.className = 'planning-line'+(checked&&!isPause?' done':'');
+    line.id = 'line-'+t.id;
+    if (!isPause) {
+      line.draggable = true;
+      line.addEventListener('dragstart', e => onDragStart(e, t.id, jourId));
+      line.addEventListener('dragover', e => onDragOver(e, t.id, jourId));
+      line.addEventListener('drop', e => onDrop(e, t.id, jourId));
+      line.addEventListener('dragend', onDragEnd);
+    }
 
     if (isPause) {
-      line.style.cssText = 'background:var(--parchment);border-color:var(--sand);opacity:0.7;';
-      line.innerHTML = `
-        <div class="tache-main" style="cursor:default;">
-          <div class="tache-color ${t.color}" style="opacity:0.5;"></div>
-          <div class="tache-info">
-            <div class="tache-name" style="color:var(--brown-light);font-size:0.8rem;">${t.name}</div>
-            ${t.sous ? `<div class="tache-sous">${t.sous}</div>` : ''}
-          </div>
-          <div class="tache-right">
-            <span class="tache-time">${t.time}</span>
-            <span class="tache-dur">${t.dur}</span>
-          </div>
-        </div>`;
+      line.style.cssText='background:var(--surface2);border-color:var(--border);opacity:0.65;';
+      line.innerHTML=`<div class="tache-main" style="cursor:default;"><div class="tache-color ${t.color}" style="opacity:0.5;"></div><div class="tache-info"><div class="tache-name" style="color:var(--text2);font-size:0.8rem;">${t.name}</div>${t.sous?`<div class="tache-sous">${t.sous}</div>`:''}</div><div class="tache-right"><span class="tache-time">${t.time}</span><span class="tache-dur">${t.dur}</span></div></div>`;
     } else {
-      line.innerHTML = `
+      const timerInit = timers[t.id] ? fmtTime(timers[t.id].remaining) : (hasDurMins ? fmtTime(t.durMins*60) : '');
+      const timerRunning = timers[t.id]?.running;
+      line.innerHTML=`
         <div class="tache-main">
+          <span class="drag-handle" title="Déplacer">⠿</span>
           <div class="tache-check" onclick="event.stopPropagation();toggleCheck('${t.id}')">
-            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-              <path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <div class="tache-color ${t.color}"></div>
           <div class="tache-info">
             <div class="tache-name">${t.name}</div>
-            ${t.sous ? `<div class="tache-sous">${t.sous}</div>` : ''}
+            ${t.sous?`<div class="tache-sous">${t.sous}</div>`:''}
+            ${hasDurMins?`<div class="timer-wrap">
+              <span class="timer-display${timerRunning?' running':''}" id="timer-display-${t.id}">${timerInit}</span>
+              <button class="timer-btn${timerRunning?' active':''}" id="timer-start-${t.id}" onclick="event.stopPropagation();${timerRunning?'pauseTimer':'startTimer'}('${t.id}',${t.durMins})">${timerRunning?'⏸':'▶'}</button>
+              <button class="timer-btn" onclick="event.stopPropagation();resetTimer('${t.id}',${t.durMins})">↺</button>
+              <div class="timer-progress"><div class="timer-bar" id="timer-bar-${t.id}" style="width:${timers[t.id]?Math.round((1-timers[t.id].remaining/(t.durMins*60))*100):0}%"></div></div>
+            </div>`:''}
           </div>
           <div class="tache-right">
             <span class="tache-time">${t.time}</span>
             <span class="tache-dur">${t.dur}</span>
-            ${hasDetail ? `<button class="expand-btn" onclick="toggleDetail('detail-${t.id}')" title="Voir détails">▾</button>` : ''}
+            <div style="display:flex;gap:2px;">
+              ${hasDetail?`<button class="expand-btn" onclick="toggleDetail('detail-${t.id}')" title="Détails">▾</button>`:''}
+              <button class="edit-tache-btn" onclick="openEditModal('${jourId}','${t.id}')" title="Modifier">✎</button>
+            </div>
           </div>
         </div>
-        ${hasDetail ? `
-        <div class="tache-detail" id="detail-${t.id}">
-          <ul class="detail-list">
-            ${t.detail.map(d => `<li>${d}</li>`).join('')}
-          </ul>
-          ${t.link ? `<a href="${t.link}" target="_blank" class="detail-link">↗ Accéder aux ressources</a>` : ''}
-        </div>` : ''}`;
+        ${hasDetail?`<div class="tache-detail" id="detail-${t.id}">
+          <ul class="detail-list">${t.detail.map(d=>`<li>${d}</li>`).join('')}</ul>
+          ${t.link?`<a href="${t.link}" target="_blank" class="detail-link">↗ Accéder aux ressources</a>`:''}
+        </div>`:''}`;
     }
-
     container.appendChild(line);
   });
 
-  // ── SECTION RETARD ──
+  // Section retard
   const retardData = getRetard(j.id);
+  const tachesNonFaites = getAllTaches(j).filter(t=>t.mat!=='pause'&&!isChecked(t.id));
+  const currentReported = retardData.taches||[];
   const retardSection = document.createElement('div');
   retardSection.className = 'retard-section';
-  retardSection.id = 'retard-section-' + j.id;
-
-  const tachesNonFaites = j.taches.filter(t => t.mat !== 'pause' && !isChecked(t.id));
-  const currentReported = retardData.taches || [];
-  const currentNote = retardData.note || '';
-
-  retardSection.innerHTML = `
+  retardSection.innerHTML=`
     <div class="retard-titre">Ce que je n'ai pas eu le temps de faire</div>
-    ${tachesNonFaites.length > 0 ? `
-    <div class="retard-taches-list">
-      ${tachesNonFaites.map(t => `
-        <div class="retard-tache-item">
-          <div class="retard-check ${currentReported.includes(t.id) ? 'reported' : ''}" id="rcheck-${t.id}" onclick="toggleRetardTache('${j.id}','${t.id}')">
-            <svg width="9" height="7" viewBox="0 0 9 7" fill="none">
-              <path d="M1 3.5L3 5.5L8 1" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <span>${t.name}${t.sous ? ' <span style="color:var(--brown-light);font-size:0.72rem;">— ' + t.sous + '</span>' : ''}</span>
-        </div>`).join('')}
-    </div>` : `<div style="font-size:0.75rem;color:var(--green);margin-bottom:0.6rem;">✓ Tout est fait !</div>`}
-    <div class="retard-note-wrap">
-      <label>Note libre</label>
-      <textarea class="retard-textarea" id="retard-note-${j.id}" placeholder="Ex : je n'ai pas fini le chapitre IS-LM, à reprendre demain matin…">${currentNote}</textarea>
-    </div>
-    <button class="retard-save-btn" onclick="saveRetardNote('${j.id}')">Enregistrer la note</button>
-  `;
+    ${tachesNonFaites.length>0?`<div style="margin-bottom:0.6rem">${tachesNonFaites.map(t=>`
+      <div class="retard-tache-item">
+        <div class="retard-check ${currentReported.includes(t.id)?'reported':''}" id="rcheck-${t.id}" onclick="toggleRetardTache('${j.id}','${t.id}')">
+          <svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5L3 5.5L8 1" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span>${t.name}${t.sous?` <span style="color:var(--text2);font-size:0.72rem;">— ${t.sous}</span>`:''}</span>
+      </div>`).join('')}</div>`:
+    `<div style="font-size:0.75rem;color:var(--green);margin-bottom:0.6rem;">✓ Tout est fait !</div>`}
+    <div style="margin-bottom:0.4rem"><label style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:4px;">Note libre</label>
+    <textarea class="retard-textarea" id="retard-note-${j.id}" placeholder="Ex : je n'ai pas fini IS-LM, à reprendre demain matin…">${retardData.note||''}</textarea></div>
+    <button class="retard-save-btn" onclick="saveRetardNote('${j.id}')">Enregistrer la note</button>`;
   container.appendChild(retardSection);
 
-  // Afficher
+  // Bouton ajouter tâche
+  const addBtn = document.createElement('button');
+  addBtn.className = 'add-tache-btn';
+  addBtn.textContent = '+ Ajouter une tâche personnalisée';
+  addBtn.onclick = openAddTacheModal;
+  container.appendChild(addBtn);
+
   const detailEl = document.getElementById('detail-jour');
   detailEl.classList.add('visible');
-  detailEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
+  detailEl.scrollIntoView({behavior:'smooth',block:'start'});
   updateJourProgress(j);
 }
 
-function toggleDetail(id) {
-  const el = document.getElementById(id);
-  if (el) el.classList.toggle('open');
-}
-
+function toggleDetail(id) { const el=document.getElementById(id); if(el) el.classList.toggle('open'); }
 function fermerDetail() {
   document.getElementById('detail-jour').classList.remove('visible');
-  document.querySelectorAll('.jour-mini').forEach(el => el.classList.remove('active'));
-  currentJourId = null;
+  document.querySelectorAll('.jour-mini').forEach(el=>el.classList.remove('active'));
+  currentJourId=null;
 }
-
 function updateJourProgress(j) {
-  const tachesActives = j.taches.filter(t => t.mat !== 'pause');
-  const done = tachesActives.filter(t => isChecked(t.id)).length;
-  const pct = tachesActives.length > 0 ? Math.round(done / tachesActives.length * 100) : 0;
-  document.getElementById('jour-progress-fill').style.width = pct + '%';
-  document.getElementById('jour-progress-pct').textContent = pct + '%';
+  const pct = getDayPct(j);
+  document.getElementById('jour-progress-fill').style.width=pct+'%';
+  document.getElementById('jour-progress-pct').textContent=pct+'%';
 }
 
-function updateAll() {
-  // Recalc global stats
-  let totalTaches = 0, totalDone = 0;
-  JOURS.forEach(j => {
-    j.taches.filter(t => t.mat !== 'pause').forEach(t => {
-      totalTaches++;
-      if (isChecked(t.id)) totalDone++;
+// ════════════════════════════════════════════════
+// STATS
+// ════════════════════════════════════════════════
+function renderStats() {
+  let totalDone=0, totalAll=0;
+  JOURS.forEach(j=>{
+    getAllTaches(j).filter(t=>t.mat!=='pause').forEach(t=>{
+      totalAll++;
+      if(isChecked(t.id)) totalDone++;
     });
   });
+  const streak = calcStreak();
+  let bestStreak = 0, cur = 0;
+  JOURS.forEach(j=>{ if(getDayPct(j)===100) cur++; else cur=0; bestStreak=Math.max(bestStreak,cur); });
 
-  document.getElementById('stat-total').textContent = totalDone;
-  document.getElementById('stat-pct').textContent = Math.round(totalDone / totalTaches * 100) + '%';
+  document.getElementById('stats-grid').innerHTML=`
+    <div class="stat-card"><div class="stat-card-val">${totalDone}</div><div class="stat-card-lbl">Tâches complètes</div></div>
+    <div class="stat-card"><div class="stat-card-val">${streak}🔥</div><div class="stat-card-lbl">Streak actuel</div></div>
+    <div class="stat-card"><div class="stat-card-val">${bestStreak}</div><div class="stat-card-lbl">Meilleur streak</div></div>`;
 
-  // Jours restants
+  // Heures par matière
+  const matHours = {};
+  JOURS.forEach(j=>{
+    getAllTaches(j).filter(t=>t.mat!=='pause'&&isChecked(t.id)).forEach(t=>{
+      const mins = t.durMins || (MAT_DUREES[t.mat]||60);
+      matHours[t.mat] = (matHours[t.mat]||0) + mins;
+    });
+  });
+  const maxH = Math.max(...Object.values(matHours), 1);
+  const bc = document.getElementById('bar-chart');
+  bc.innerHTML = Object.entries(matHours).sort((a,b)=>b[1]-a[1]).map(([mat,mins])=>{
+    const h = (mins/60).toFixed(1);
+    const pct = Math.round(mins/maxH*100);
+    const col = MAT_COLORS[mat]||'var(--caramel)';
+    return `<div class="bar-row">
+      <span class="bar-label">${mat}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${col}"><span>${h}h</span></div></div>
+    </div>`;
+  }).join('');
+
+  // Complétion par jour
+  const cc = document.getElementById('completion-chart');
   const today = new Date();
-  const fin = new Date(2026, 3, 20); // 20 avril 2026
-  const diff = Math.max(0, Math.ceil((fin - today) / 86400000));
-  document.getElementById('stat-jours').textContent = diff;
-
-  // Rebuild grids
-  buildGrids();
-
-  // Refresh detail if open
-  if (currentJourId) {
-    const j = JOURS.find(x => x.id === currentJourId);
-    if (j) {
-      // Update check states
-      j.taches.filter(t => t.mat !== 'pause').forEach(t => {
-        const line = document.getElementById('line-' + t.id);
-        if (line) {
-          if (isChecked(t.id)) line.classList.add('done');
-          else line.classList.remove('done');
-          const check = line.querySelector('.tache-check');
-          if (check) {
-            check.style.background = isChecked(t.id) ? 'var(--green)' : '';
-            check.style.borderColor = isChecked(t.id) ? 'var(--green)' : '';
-          }
-        }
-      });
-      updateJourProgress(j);
-    }
-  }
+  cc.innerHTML = JOURS.map(j=>{
+    const jDate = new Date(2026,3,j.date);
+    const pct = getDayPct(j);
+    let cls = 'future';
+    if (jDate <= today) cls = pct===100?'full':pct>0?'partial':'none';
+    return `<div class="comp-cell ${cls}" title="${j.jour} ${j.date} avril — ${pct}%"></div>`;
+  }).join('');
 }
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
+// UPDATE ALL
+// ════════════════════════════════════════════════
+function updateAll() {
+  let totalT=0, totalD=0;
+  JOURS.forEach(j=>{ getAllTaches(j).filter(t=>t.mat!=='pause').forEach(t=>{ totalT++; if(isChecked(t.id)) totalD++; }); });
+  document.getElementById('stat-total').textContent=totalD;
+  document.getElementById('stat-pct').textContent=Math.round(totalD/totalT*100)+'%';
+  const today=new Date(), fin=new Date(2026,3,20);
+  document.getElementById('stat-jours').textContent=Math.max(0,Math.ceil((fin-today)/86400000));
+  document.getElementById('streak-val').textContent=calcStreak();
+  buildGrids();
+  if(currentJourId){ const j=JOURS.find(x=>x.id===currentJourId); if(j){ getAllTaches(j).filter(t=>t.mat!=='pause').forEach(t=>{ const line=document.getElementById('line-'+t.id); if(line){if(isChecked(t.id))line.classList.add('done');else line.classList.remove('done');}}); updateJourProgress(j); } }
+}
+
+// ════════════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════════════
-loadState();
-loadRetard();
+// ════════════════════════════════════════════════
+loadAll();
 buildGrids();
 updateAll();
 
-// Auto-ouvrir aujourd'hui si dans la période
-const now = new Date();
-const nowDate = now.getDate();
-const nowMonth = now.getMonth(); // 3 = avril
-if (nowMonth === 3) {
-  const todayJour = JOURS.find(j => j.date === nowDate);
-  if (todayJour) {
-    setTimeout(() => ouvrirDetail(todayJour.id), 300);
-  }
-}
+const now=new Date(), nowDate=now.getDate(), nowMonth=now.getMonth();
+if(nowMonth===3){const tj=JOURS.find(j=>j.date===nowDate);if(tj)setTimeout(()=>ouvrirDetail(tj.id),300);}
+
+// Changer citation toutes les 2h
+setInterval(nextCitation, 7200000);
+
+// Fermer modal au clic extérieur
+document.getElementById('modal-edit').addEventListener('click', e => { if(e.target===e.currentTarget)closeModal(); });
 </script>
 </body>
 </html>
