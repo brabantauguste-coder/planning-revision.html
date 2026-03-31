@@ -467,6 +467,143 @@
     font-style: italic;
   }
 
+  /* ── SECTION RETARD ── */
+  .retard-section {
+    margin-top: 1.5rem;
+    border: 1.5px dashed var(--tan);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    background: var(--white);
+  }
+  .retard-titre {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--brown-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .retard-titre::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    flex-shrink: 0;
+  }
+  .retard-taches-list { margin-bottom: 0.8rem; }
+  .retard-tache-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 0.5px solid var(--sand);
+    font-size: 0.8rem;
+    color: var(--brown-dark);
+  }
+  .retard-tache-item:last-child { border-bottom: none; }
+  .retard-check {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--red);
+    border-radius: 3px;
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .retard-check:hover { background: var(--red-soft); }
+  .retard-check.reported { background: var(--red); border-color: var(--red); }
+  .retard-check.reported svg { display: block; }
+  .retard-check svg { display: none; }
+  .retard-note-wrap { margin-top: 0.6rem; }
+  .retard-note-wrap label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--tan);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .retard-textarea {
+    width: 100%;
+    min-height: 60px;
+    background: var(--parchment);
+    border: 1px solid var(--sand);
+    border-radius: 7px;
+    padding: 0.5rem 0.7rem;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--espresso);
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .retard-textarea:focus { border-color: var(--caramel); }
+  .retard-textarea::placeholder { color: var(--tan); font-style: italic; }
+  .retard-save-btn {
+    margin-top: 0.5rem;
+    background: none;
+    border: 1px solid var(--caramel);
+    border-radius: 6px;
+    padding: 5px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--brown);
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.15s;
+  }
+  .retard-save-btn:hover { background: var(--parchment); color: var(--espresso); }
+
+  /* ── BANDEAU REPORT (affiché sur le jour suivant) ── */
+  .report-bandeau {
+    background: #FFF6F0;
+    border: 1.5px solid var(--red-soft);
+    border-left: 4px solid var(--red);
+    border-radius: 0 8px 8px 0;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+  }
+  .report-bandeau-titre {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+  .report-item {
+    font-size: 0.8rem;
+    color: var(--brown-dark);
+    padding: 2px 0;
+    padding-left: 0.8rem;
+    position: relative;
+  }
+  .report-item::before { content: '↳'; position: absolute; left: 0; color: var(--red); font-size: 0.7rem; }
+  .report-note-txt {
+    font-size: 0.78rem;
+    color: var(--brown);
+    font-style: italic;
+    margin-top: 0.4rem;
+    padding-left: 0.8rem;
+    border-left: 2px solid var(--red-soft);
+  }
+
+  /* ── INDICATEUR mini sur accueil ── */
+  .jm-retard {
+    display: none;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    position: absolute;
+    top: 4px; left: 4px;
+  }
+  .jour-mini.has-retard .jm-retard { display: block; }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 680px) {
     .grid-semaines { grid-template-columns: 1fr; }
@@ -859,6 +996,45 @@ function toggleCheck(id) {
   updateAll();
 }
 
+// ── RETARD STATE ──
+const RETARD_KEY = 'planning_retard_2026';
+let retardState = {};
+
+function loadRetard() {
+  try {
+    const saved = localStorage.getItem(RETARD_KEY);
+    retardState = saved ? JSON.parse(saved) : {};
+  } catch(e) { retardState = {}; }
+}
+function saveRetard() {
+  try { localStorage.setItem(RETARD_KEY, JSON.stringify(retardState)); } catch(e) {}
+}
+function getRetard(jourId) {
+  return retardState[jourId] || { taches: [], note: '' };
+}
+function toggleRetardTache(jourId, tacheId) {
+  if (!retardState[jourId]) retardState[jourId] = { taches: [], note: '' };
+  const arr = retardState[jourId].taches;
+  const idx = arr.indexOf(tacheId);
+  if (idx >= 0) arr.splice(idx, 1);
+  else arr.push(tacheId);
+  saveRetard();
+  // Update UI
+  const btn = document.getElementById('rcheck-' + tacheId);
+  if (btn) btn.classList.toggle('reported', arr.includes(tacheId));
+  buildGrids();
+}
+function saveRetardNote(jourId) {
+  if (!retardState[jourId]) retardState[jourId] = { taches: [], note: '' };
+  const ta = document.getElementById('retard-note-' + jourId);
+  if (ta) retardState[jourId].note = ta.value;
+  saveRetard();
+  buildGrids();
+  // Visual feedback
+  const btn = document.querySelector(`[onclick="saveRetardNote('${jourId}')"]`);
+  if (btn) { btn.textContent = '✓ Enregistré'; setTimeout(() => { btn.textContent = 'Enregistrer la note'; }, 1500); }
+}
+
 // ═══════════════════════════════════════════════════════
 // RENDER
 // ═══════════════════════════════════════════════════════
@@ -883,13 +1059,18 @@ function buildGrids() {
     const shortDay = j.jour.substring(0, 3).toLowerCase();
     const dayMap = {'dim':'Dim.','lun':'Lun.','mar':'Mar.','mer':'Mer.','jeu':'Jeu.','ven':'Ven.','sam':'Sam.'};
 
+    const retardData = getRetard(j.id);
+    const hasRetard = (retardData.taches && retardData.taches.length > 0) || retardData.note;
+
     el.innerHTML = `
+      <div class="jm-retard"></div>
       <span class="jm-label">${dayMap[shortDay] || j.jour.substring(0,3)}</span>
       <span class="jm-date">${j.date}</span>
       <div class="jm-progress"><div class="jm-bar" style="width:${pct}%"></div></div>
       <div class="jm-check"></div>
     `;
     if (pct === 100) el.classList.add('complet');
+    if (hasRetard) el.classList.add('has-retard');
 
     (j.semaine === 1 ? s1 : s2).appendChild(el);
   });
@@ -918,11 +1099,28 @@ function ouvrirDetail(jourId) {
 
   // Note spéciale
   const noteEl = document.getElementById('detail-note');
-  if (j.note) {
-    noteEl.innerHTML = `<div class="note-special">${j.note}</div>`;
-  } else {
-    noteEl.innerHTML = '';
+  let noteHTML = '';
+  if (j.note) noteHTML += `<div class="note-special">${j.note}</div>`;
+
+  // Bandeau report du jour précédent
+  const jIdx = JOURS.findIndex(x => x.id === jourId);
+  if (jIdx > 0) {
+    const prevJ = JOURS[jIdx - 1];
+    const prevRetard = getRetard(prevJ.id);
+    const prevTaches = (prevRetard.taches || []);
+    const prevNote = prevRetard.note || '';
+    if (prevTaches.length > 0 || prevNote) {
+      noteHTML += `<div class="report-bandeau">
+        <div class="report-bandeau-titre">↩ À rattraper depuis ${prevJ.jour} ${prevJ.date} ${prevJ.mois}</div>
+        ${prevTaches.map(tid => {
+          const t = prevJ.taches.find(x => x.id === tid);
+          return t ? `<div class="report-item">${t.name}${t.sous ? ' <span style="color:var(--brown-light);font-size:0.72rem;">— ' + t.sous + '</span>' : ''}</div>` : '';
+        }).join('')}
+        ${prevNote ? `<div class="report-note-txt">${prevNote}</div>` : ''}
+      </div>`;
+    }
   }
+  noteEl.innerHTML = noteHTML;
 
   // Tâches
   const container = document.getElementById('detail-taches');
@@ -993,6 +1191,38 @@ function ouvrirDetail(jourId) {
 
     container.appendChild(line);
   });
+
+  // ── SECTION RETARD ──
+  const retardData = getRetard(j.id);
+  const retardSection = document.createElement('div');
+  retardSection.className = 'retard-section';
+  retardSection.id = 'retard-section-' + j.id;
+
+  const tachesNonFaites = j.taches.filter(t => t.mat !== 'pause' && !isChecked(t.id));
+  const currentReported = retardData.taches || [];
+  const currentNote = retardData.note || '';
+
+  retardSection.innerHTML = `
+    <div class="retard-titre">Ce que je n'ai pas eu le temps de faire</div>
+    ${tachesNonFaites.length > 0 ? `
+    <div class="retard-taches-list">
+      ${tachesNonFaites.map(t => `
+        <div class="retard-tache-item">
+          <div class="retard-check ${currentReported.includes(t.id) ? 'reported' : ''}" id="rcheck-${t.id}" onclick="toggleRetardTache('${j.id}','${t.id}')">
+            <svg width="9" height="7" viewBox="0 0 9 7" fill="none">
+              <path d="M1 3.5L3 5.5L8 1" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span>${t.name}${t.sous ? ' <span style="color:var(--brown-light);font-size:0.72rem;">— ' + t.sous + '</span>' : ''}</span>
+        </div>`).join('')}
+    </div>` : `<div style="font-size:0.75rem;color:var(--green);margin-bottom:0.6rem;">✓ Tout est fait !</div>`}
+    <div class="retard-note-wrap">
+      <label>Note libre</label>
+      <textarea class="retard-textarea" id="retard-note-${j.id}" placeholder="Ex : je n'ai pas fini le chapitre IS-LM, à reprendre demain matin…">${currentNote}</textarea>
+    </div>
+    <button class="retard-save-btn" onclick="saveRetardNote('${j.id}')">Enregistrer la note</button>
+  `;
+  container.appendChild(retardSection);
 
   // Afficher
   const detailEl = document.getElementById('detail-jour');
@@ -1069,6 +1299,7 @@ function updateAll() {
 // INIT
 // ═══════════════════════════════════════════════════════
 loadState();
+loadRetard();
 buildGrids();
 updateAll();
 
