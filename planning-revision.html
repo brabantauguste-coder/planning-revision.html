@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planning de Révisions — Concours 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --parchment: #F2EDE4;
+    --sand: #E8E0D0;
+    --tan: #D4C5AE;
+    --caramel: #C4A882;
+    --brown-light: #9B7B55;
+    --brown: #7A5C38;
+    --brown-dark: #5A3E22;
+    --espresso: #3B2A18;
+    --ink: #2C1E0F;
+    --green-soft: #D4DFCA;
+    --green: #6A8B5A;
+    --blue-soft: #CAD4DF;
+    --blue: #4A6B8A;
+    --purple-soft: #D8CADF;
+    --purple: #7A5A8A;
+    --red-soft: #DFCACA;
+    --red: #8A4A4A;
+    --gold: #C49A3C;
+    --white: #FFFFFF;
+    --shadow: rgba(58, 42, 24, 0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'Instrument Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--espresso);
+    padding: 2rem 2.5rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--caramel);
+  }
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--parchment);
+    letter-spacing: 0.02em;
+  }
+  header p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--caramel);
+    margin-top: 0.3rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .header-stats {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+  .stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--caramel);
+    line-height: 1;
+  }
+  .stat-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--tan);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* ── VUE GLOBALE ── */
+  #vue-globale { margin-bottom: 2.5rem; }
+  .vue-titre {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--brown-light);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .grid-semaines {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .semaine-bloc {
+    background: var(--white);
+    border: 1px solid var(--sand);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .semaine-header {
+    background: var(--espresso);
+    padding: 0.7rem 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .semaine-header span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--parchment);
+  }
+  .semaine-header small {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--caramel);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .jours-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+  }
+  .jour-mini {
+    padding: 0.6rem 0.4rem;
+    border-right: 1px solid var(--sand);
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .jour-mini:last-child { border-right: none; }
+  .jour-mini:hover { background: var(--parchment); }
+  .jour-mini.active { background: var(--espresso); }
+  .jour-mini.active .jm-label { color: var(--caramel); }
+  .jour-mini.active .jm-date { color: var(--parchment); }
+  .jour-mini.weekend { background: var(--parchment); opacity: 0.7; }
+  .jour-mini.weekend:hover { opacity: 1; }
+  .jm-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--brown-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    text-align: center;
+  }
+  .jm-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--espresso);
+    display: block;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .jm-progress {
+    margin-top: 4px;
+    height: 3px;
+    background: var(--sand);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .jm-bar {
+    height: 100%;
+    background: var(--caramel);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+  .jm-check {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    display: none;
+  }
+  .jour-mini.complet .jm-check { display: block; }
+
+  /* ── DETAIL JOUR ── */
+  #detail-jour {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  #detail-jour.visible { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--sand);
+  }
+  .detail-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--espresso);
+    line-height: 1;
+  }
+  .detail-date span {
+    display: block;
+    font-size: 0.85rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--brown-light);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    font-weight: 400;
+  }
+  .detail-meta {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .badge-hours { background: var(--espresso); color: var(--caramel); }
+  .badge-week { background: var(--parchment); color: var(--brown); border: 1px solid var(--tan); }
+
+  .close-btn {
+    background: none;
+    border: 1px solid var(--tan);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--brown-light);
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.15s;
+  }
+  .close-btn:hover { background: var(--parchment); color: var(--espresso); }
+
+  /* ── BLOCS DE TÂCHES ── */
+  .planning-line {
+    background: var(--white);
+    border: 1px solid var(--sand);
+    border-radius: 10px;
+    margin-bottom: 0.6rem;
+    overflow: hidden;
+    transition: box-shadow 0.15s;
+  }
+  .planning-line:hover { box-shadow: 0 2px 12px var(--shadow); }
+  .planning-line.done { opacity: 0.55; }
+  .planning-line.done .tache-name { text-decoration: line-through; color: var(--brown-light); }
+
+  .tache-main {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .tache-check {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--tan);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .tache-check:hover { border-color: var(--caramel); background: var(--parchment); }
+  .done .tache-check {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .tache-check svg { display: none; }
+  .done .tache-check svg { display: block; }
+
+  .tache-color {
+    width: 4px;
+    height: 36px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .tache-info { flex: 1; }
+  .tache-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--espresso);
+    line-height: 1.3;
+  }
+  .tache-sous {
+    font-size: 0.75rem;
+    color: var(--brown-light);
+    margin-top: 2px;
+  }
+  .tache-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+  }
+  .tache-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--brown-light);
+    letter-spacing: 0.03em;
+  }
+  .tache-dur {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--caramel);
+    background: var(--parchment);
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+  .expand-btn {
+    background: none;
+    border: none;
+    color: var(--tan);
+    cursor: pointer;
+    padding: 4px;
+    font-size: 0.7rem;
+    transition: color 0.15s;
+  }
+  .expand-btn:hover { color: var(--brown); }
+
+  /* ── DÉTAIL EXPANDABLE ── */
+  .tache-detail {
+    display: none;
+    padding: 0 1rem 0.8rem 3.4rem;
+    border-top: 1px solid var(--sand);
+  }
+  .tache-detail.open { display: block; }
+  .detail-list { list-style: none; padding-top: 0.6rem; }
+  .detail-list li {
+    font-size: 0.8rem;
+    color: var(--brown-dark);
+    padding: 3px 0;
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.5;
+  }
+  .detail-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--caramel);
+    font-size: 0.7rem;
+  }
+  .detail-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 0.6rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--blue);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--blue-soft);
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--blue-soft);
+    opacity: 0.8;
+    transition: opacity 0.15s;
+  }
+  .detail-link:hover { opacity: 1; }
+
+  /* ── SÉPARATEURS ── */
+  .sep {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0.8rem 0 0.5rem;
+  }
+  .sep-line { flex: 1; height: 1px; background: var(--sand); }
+  .sep-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--tan);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  /* ── COLORS par matière ── */
+  .c-esh { background: var(--caramel); }
+  .c-maths { background: var(--green); }
+  .c-anglais { background: var(--blue); }
+  .c-italien { background: var(--blue); }
+  .c-philo { background: var(--purple); }
+  .c-anki { background: var(--gold); }
+  .c-pause { background: var(--tan); }
+
+  /* ── PROGRESS BAR JOUR ── */
+  .jour-progress-wrap {
+    background: var(--parchment);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .jour-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--sand);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .jour-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--caramel), var(--brown-light));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .jour-progress-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--brown-light);
+    min-width: 30px;
+    text-align: right;
+  }
+  .jour-progress-txt {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--tan);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ── NOTE / SPECIAL ── */
+  .note-special {
+    background: var(--parchment);
+    border-left: 3px solid var(--caramel);
+    border-radius: 0 8px 8px 0;
+    padding: 0.7rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    color: var(--brown-dark);
+    font-style: italic;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 680px) {
+    .grid-semaines { grid-template-columns: 1fr; }
+    header { padding: 1.2rem 1rem 1rem; }
+    .header-stats { gap: 1.2rem; }
+    .container { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Planning de Révisions — Concours 2026</h1>
+  <p>6 avril → 20 avril · ESH · Maths · Anglais · Italien · Philosophie · Anki</p>
+  <div class="header-stats">
+    <div class="stat">
+      <span class="stat-val" id="stat-total">0</span>
+      <span class="stat-lbl">Tâches complètes</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val" id="stat-pct">0%</span>
+      <span class="stat-lbl">Avancement global</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val" id="stat-jours">0</span>
+      <span class="stat-lbl">Jours restants</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- VUE GLOBALE -->
+  <div id="vue-globale">
+    <div class="vue-titre">Vue d'ensemble des vacances</div>
+    <div class="grid-semaines">
+      <div class="semaine-bloc">
+        <div class="semaine-header">
+          <span>Semaine 1</span>
+          <small>6 → 12 avril</small>
+        </div>
+        <div class="jours-grid" id="grid-s1"></div>
+      </div>
+      <div class="semaine-bloc">
+        <div class="semaine-header">
+          <span>Semaine 2</span>
+          <small>13 → 20 avril</small>
+        </div>
+        <div class="jours-grid" id="grid-s2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAIL JOUR -->
+  <div id="detail-jour">
+    <div class="detail-header">
+      <div>
+        <div class="detail-date" id="detail-titre">Dimanche 6 avril</div>
+        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap;" id="detail-badges"></div>
+      </div>
+      <button class="close-btn" onclick="fermerDetail()">✕ Fermer</button>
+    </div>
+    <div id="detail-note"></div>
+    <div class="jour-progress-wrap">
+      <span class="jour-progress-txt">Progression du jour</span>
+      <div class="jour-progress-bar"><div class="jour-progress-fill" id="jour-progress-fill" style="width:0%"></div></div>
+      <span class="jour-progress-pct" id="jour-progress-pct">0%</span>
+    </div>
+    <div id="detail-taches"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DONNÉES
+// ═══════════════════════════════════════════════════════
+
+const CHAPITRES_ESH = [
+  { id: 'esh1', label: 'HPE + Chap. 1', detail: ['Histoire de la pensée économique', 'Problématiques macro : consommation, épargne, État', 'Fondements de la macroéconomie'], jours: 1 },
+  { id: 'esh2a', label: 'CPP + Défaillances du marché + Concurrence imparfaite', detail: ['Concurrence pure et parfaite', 'Défaillances de marché (externalités, biens publics)', 'Monopole, oligopole, concurrence monopolistique'], jours: 1 },
+  { id: 'esh2b', label: 'Concentration + Gouvernance + Sociologies', detail: ['Concentration des entreprises et gouvernance', 'Sociologie des organisations', 'Sociologie du travail', 'Politique de la concurrence'], jours: 1 },
+  { id: 'esh3', label: 'Système productif + Politiques industrielle, concurrence, fiscale', detail: ['Transformation du système productif', 'Politique industrielle (chap. 12)', 'Politique de la concurrence (chap. 12)', 'Politique fiscale (chap. 12)'], jours: 1 },
+  { id: 'esh4a', label: 'Croissance économique + Économie du développement + Dette publique', detail: ['Théories et modèles de la croissance', 'Économie du développement (IDH, convergence)', 'La question de la dette publique'], jours: 1 },
+  { id: 'esh4b', label: 'Mondialisation (1/2)', detail: ['Commerce international : théories classiques et nouvelles', 'Flux de capitaux et investissements directs étrangers', 'Firmes multinationales'], jours: 1 },
+  { id: 'esh4c', label: 'Mondialisation (2/2) + Fluctuations et crises + OG-DG', detail: ['Mondialisation et inégalités', 'Fluctuations, crises économiques', 'Modèle Offre Globale / Demande Globale', 'Politiques conjoncturelles'], jours: 1 },
+  { id: 'esh5a', label: 'Monnaie + Balance des paiements + Taux de change', detail: ['Création monétaire, rôles de la monnaie', 'Balance des paiements', 'Taux de change : régimes et déterminants'], jours: 1 },
+  { id: 'esh5b', label: 'IS-LM + IS-LM-BP + SMI + GF + Inflation', detail: ['Modèle IS-LM', 'Extension IS-LM-BP (Mundell-Fleming)', 'Système monétaire international', 'Globalisation financière', 'Inflation : causes, mesure, politiques'], jours: 1 },
+  { id: 'esh5c', label: 'Monnaie — révision approfondie (chapitres techniques)', detail: ['Révision globale du bloc monétaire', 'Retour sur les mécanismes IS-LM difficiles', 'Entraînement sur sujets type concours'], jours: 1 },
+  { id: 'esh6a', label: 'Europe + Chômage', detail: ['Construction et institutions européennes', 'Zone euro et politiques communes', 'Théories et mesures du chômage'], jours: 1 },
+  { id: 'esh6b', label: 'Politique de l\'emploi + Révision chômage (technique)', detail: ['Politiques actives et passives de l\'emploi', 'Marché du travail : flexibilité, dualisme', 'Révision approfondie du chapitre chômage'], jours: 1 },
+  { id: 'esh7', label: 'Démographie + Politiques sociales', detail: ['Transitions démographiques', 'Systèmes de protection sociale', 'Politiques sociales comparées'], jours: 0.5 },
+  { id: 'esh8', label: 'Structure sociale + Mobilité sociale', detail: ['Stratification et classes sociales', 'Mobilité sociale : mesure et déterminants', 'Reproduction sociale (Bourdieu, etc.)'], jours: 0.5 },
+];
+
+// 17 chapitres maths 2A + chapitres 1A (regroupés par thème pour 2 exercices/jour)
+const CHAPITRES_MATHS_1A = [
+  { id: 'm1a_1', label: '1A — Bases, sommes, ensembles', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 1 : Les bases', 'Chap. 2 : Sommes et produits', 'Chap. 3 : Ensembles'] },
+  { id: 'm1a_2', label: '1A — Applications, coeff. binomiaux, suites', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 4 : Injection, surjection, bijection', 'Chap. 5 : Coefficients binomiaux', 'Chap. 6 : Suites et suites usuelles'] },
+  { id: 'm1a_3', label: '1A — Fonctions usuelles, polynômes, limites', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 1 (ancien) : Fonctions usuelles', 'Chap. 5 (ancien) : Polynômes', 'Chap. 6 (ancien) : Limites de fonctions'] },
+  { id: 'm1a_4', label: '1A — Matrices, limites de suites, probas fini', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 9 : Matrices', 'Chap. 10 : Limites de suites', 'Chap. 12 : Probabilités en univers fini'] },
+  { id: 'm1a_5', label: '1A — Continuité, séries, probas infini', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 13 : Continuité des fonctions', 'Chap. 14 : Séries numériques', 'Chap. 16 : Probabilités en univers infini'] },
+  { id: 'm1a_6', label: '1A — Dérivabilité, VA discrètes, intégrales', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 17 : Dérivabilité et convexité', 'Chap. 18 : VA discrètes (généralités)', 'Chap. 19 : Intégrales sur un segment'] },
+  { id: 'm1a_7', label: '1A — Lois discrètes, équa. diff., syst. linéaires', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 21 : Lois discrètes usuelles', 'Chap. 15 : Équations différentielles (1A)', 'Chap. 16 : Systèmes linéaires (1A)'] },
+  { id: 'm1a_8', label: '1A — Espaces vectoriels, appli. linéaires (1A)', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-1a/cours-et-exercices/', chapitres: ['Chap. 18 : Espaces vectoriels (1A)', 'Chap. 19 : Applications linéaires (1A)', 'Chap. 24 : Graphes'] },
+];
+const CHAPITRES_MATHS_2A = [
+  { id: 'm2a_1', label: '2A — Espaces vectoriels + Suites et séries', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 1 : Espaces vectoriels', 'Chap. 2 : Compléments sur les suites et séries'] },
+  { id: 'm2a_2', label: '2A — Couples de VA discrètes + Applications linéaires', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 3 : Couples de variables aléatoires discrètes', 'Chap. 4 : Applications linéaires (2A)'] },
+  { id: 'm2a_3', label: '2A — Comparaison de fonctions + Intégrales impropres', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 5 : Comparaison de fonctions', 'Chap. 6 : Intégrales impropres'] },
+  { id: 'm2a_4', label: '2A — Matrices des appli. linéaires + VA à densité', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 7 : Représentation matricielle des appli. linéaires', 'Chap. 8 : Variables aléatoires à densité'] },
+  { id: 'm2a_5', label: '2A — Statistiques + Développements limités', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 9 : Statistiques descriptives uni. et bivariées', 'Chap. 10 : Développements limités'] },
+  { id: 'm2a_6', label: '2A — Diagonalisation + Lois à densité usuelles', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 11 : Diagonalisation des matrices', 'Chap. 12 : Lois à densité usuelles'] },
+  { id: 'm2a_7', label: '2A — Fonctions 2 variables + Convergence des VA', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 13 : Fonctions de deux variables', 'Chap. 14 : Convergence de suites de VA'] },
+  { id: 'm2a_8', label: '2A — Équations différentielles + Estimateurs', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 15 : Équations diff. et systèmes différentiels', 'Chap. 16 : Estimateurs et intervalles de confiance'] },
+  { id: 'm2a_9', label: '2A — Chaînes de Markov + Révision globale', url: 'https://jeremylegendre.fr/mathematiques-appliquees-ecg-2a/cours-et-exercices/', chapitres: ['Chap. 17 : Chaînes de Markov', 'Révision générale 2A : questions de cours'] },
+];
+
+const ALL_MATHS = [...CHAPITRES_MATHS_1A, ...CHAPITRES_MATHS_2A];
+
+// ═══════════════════════════════════════════════════════
+// PLANNING JOUR PAR JOUR
+// Semaine 1 : début 8h, dîner 18h (45min), fin ~22h30
+// Semaine 2 : début 9h, dîner 21h30 (45min), fin ~23h30
+// Déjeuner : 1h (30min repas + 30min sieste), à 13h s1 / 13h30 s2
+// ESH le matin (meilleur moment), Maths après déjeuner
+// Chaque jour : 3h ESH cours + 30min sujet ESH + 1h anglais + 1h italien + 1h30 philo + 3h maths (2h exercices + 1h cours) + 35min anki
+// Total matières = 10h35 → s'étale sur la journée
+// ═══════════════════════════════════════════════════════
+
+const JOURS = [
+  // ── DIMANCHE 6 AVRIL (J1 — S1 — début 8h) ──
+  {
+    id: 'j1', date: 6, mois: 'avril', jour: 'Dimanche', semaine: 1,
+    note: 'Premier jour de révisions — installe ton rythme calmement.',
+    mathsIdx: 0,
+    taches: [
+      { id: 't_j1_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'HPE + Chap. 1 : macroéconomie, consommation, épargne', time: '8h00', dur: '3h', detail: CHAPITRES_ESH[0].detail, link: null },
+      { id: 't_j1_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Demi-heure de sujet / dissertation type concours', time: '11h00', dur: '30min', detail: ['Préparer un plan détaillé ou traiter une introduction', 'Entraînement à la problématique'], link: null },
+      { id: 't_j1_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '30min repas · 30min sieste ou pause', time: '13h00', dur: '1h', detail: [], link: null },
+      { id: 't_j1_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[0].label, time: '14h00', dur: '2h', detail: ALL_MATHS[0].chapitres, link: ALL_MATHS[0].url },
+      { id: 't_j1_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours, théorèmes, définitions', time: '16h00', dur: '1h', detail: ['Relire le cours correspondant aux exercices faits', 'Listes des questions classiques (site Légendre)'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
+      { id: 't_j1_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision de cours / notions', time: '17h00', dur: '1h30', detail: ['Révision d\'une notion ou d\'un auteur au programme', 'Relecture de corrections ou de dissertations type'], link: null },
+      { id: 't_j1_7', mat: 'pause', color: 'c-pause', name: 'Dîner', sous: '', time: '18h00', dur: '45min', detail: [], link: null },
+      { id: 't_j1_8', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocabulaire, grammaire, compréhension', time: '19h00', dur: '1h', detail: ['Vocabulaire thématique', 'Point de grammaire ou expression écrite', 'Écoute ou lecture d\'un document civilisation'], link: null },
+      { id: 't_j1_9', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocabulaire, grammaire, civilisation', time: '20h00', dur: '1h', detail: ['Vocabulaire et expressions idiomatiques', 'Grammaire (point du jour)', 'Document de civilisation italienne'], link: null },
+      { id: 't_j1_10', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour — toutes matières', time: '21h15', dur: '35min', detail: ['Passer toutes les cartes dues', 'Ajouter éventuellement les définitions apprises aujourd\'hui'], link: null },
+    ]
+  },
+  // ── LUNDI 7 AVRIL (J2 — S1) ──
+  {
+    id: 'j2', date: 7, mois: 'avril', jour: 'Lundi', semaine: 1,
+    mathsIdx: 1,
+    taches: [
+      { id: 't_j2_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'CPP + Défaillances du marché + Concurrence imparfaite', time: '8h00', dur: '3h', detail: CHAPITRES_ESH[1].detail, link: null },
+      { id: 't_j2_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Demi-heure de sujet type concours', time: '11h00', dur: '30min', detail: ['Traiter une introduction complète ou un plan détaillé'], link: null },
+      { id: 't_j2_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '30min repas · 30min sieste', time: '13h00', dur: '1h', detail: [], link: null },
+      { id: 't_j2_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[1].label, time: '14h00', dur: '2h', detail: ALL_MATHS[1].chapitres, link: ALL_MATHS[1].url },
+      { id: 't_j2_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions classiques + théorèmes', time: '16h00', dur: '1h', detail: ['Relire le cours', 'Questions de cours oraux HEC'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-de-cours.pdf' },
+      { id: 't_j2_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision de cours / notions', time: '17h00', dur: '1h30', detail: ['Notion au programme', 'Relecture d\'une correction'], link: null },
+      { id: 't_j2_7', mat: 'pause', color: 'c-pause', name: 'Dîner', sous: '', time: '18h00', dur: '45min', detail: [], link: null },
+      { id: 't_j2_8', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocabulaire, grammaire, civilisation', time: '19h00', dur: '1h', detail: ['Vocabulaire thématique', 'Grammaire ou expression', 'Document civilisation'], link: null },
+      { id: 't_j2_9', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab, grammaire, civilisation', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation italienne'], link: null },
+      { id: 't_j2_10', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h15', dur: '35min', detail: ['Cartes dues', 'Nouvelles définitions'], link: null },
+    ]
+  },
+  // ── MARDI 8 AVRIL ──
+  {
+    id: 'j3', date: 8, mois: 'avril', jour: 'Mardi', semaine: 1,
+    mathsIdx: 2,
+    taches: [
+      { id: 't_j3_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Concentration + Gouvernance + Sociologies des orga. et du travail', time: '8h00', dur: '3h', detail: CHAPITRES_ESH[2].detail, link: null },
+      { id: 't_j3_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '11h00', dur: '30min', detail: ['Introduction ou plan détaillé'], link: null },
+      { id: 't_j3_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h00', dur: '1h', detail: [], link: null },
+      { id: 't_j3_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[2].label, time: '14h00', dur: '2h', detail: ALL_MATHS[2].chapitres, link: ALL_MATHS[2].url },
+      { id: 't_j3_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Retour sur les points difficiles', time: '16h00', dur: '1h', detail: ['Théorèmes clés', 'Questions classiques oraux'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
+      { id: 't_j3_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions', time: '17h00', dur: '1h30', detail: ['Auteur ou notion au programme', 'Relecture correction'], link: null },
+      { id: 't_j3_7', mat: 'pause', color: 'c-pause', name: 'Dîner', sous: '', time: '18h00', dur: '45min', detail: [], link: null },
+      { id: 't_j3_8', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Entraînement compréhension + expression', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression écrite ou orale', 'Document audio/presse'], link: null },
+      { id: 't_j3_9', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab + grammaire + civilisation', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
+      { id: 't_j3_10', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h15', dur: '35min', detail: ['Toutes les cartes dues'], link: null },
+    ]
+  },
+  // ── MERCREDI 9 AVRIL ──
+  {
+    id: 'j4', date: 9, mois: 'avril', jour: 'Mercredi', semaine: 1,
+    mathsIdx: 3,
+    taches: [
+      { id: 't_j4_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Système productif + Politiques industrielle, concurrence, fiscale', time: '8h00', dur: '3h', detail: CHAPITRES_ESH[3].detail, link: null },
+      { id: 't_j4_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '11h00', dur: '30min', detail: ['Introduction ou plan détaillé'], link: null },
+      { id: 't_j4_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h00', dur: '1h', detail: [], link: null },
+      { id: 't_j4_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[3].label, time: '14h00', dur: '2h', detail: ALL_MATHS[3].chapitres, link: ALL_MATHS[3].url },
+      { id: 't_j4_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours', time: '16h00', dur: '1h', detail: ['Cours du jour', 'Exercices de vacances à refaire'], link: 'https://jeremylegendre.fr/wp-content/uploads/Exercices-de-vacances_ENONCE.pdf' },
+      { id: 't_j4_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions + auteurs', time: '17h00', dur: '1h30', detail: ['Notion ou auteur au programme', 'Correction à relire'], link: null },
+      { id: 't_j4_7', mat: 'pause', color: 'c-pause', name: 'Dîner', sous: '', time: '18h00', dur: '45min', detail: [], link: null },
+      { id: 't_j4_8', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocab + grammaire + civilisation', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Point de grammaire', 'Civilisation'], link: null },
+      { id: 't_j4_9', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab + grammaire + civilisation', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
+      { id: 't_j4_10', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h15', dur: '35min', detail: ['Toutes cartes dues'], link: null },
+    ]
+  },
+  // ── JEUDI 10 AVRIL ──
+  {
+    id: 'j5', date: 10, mois: 'avril', jour: 'Jeudi', semaine: 1,
+    mathsIdx: 4,
+    taches: [
+      { id: 't_j5_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Croissance économique + Économie du développement + Dette publique', time: '8h00', dur: '3h', detail: CHAPITRES_ESH[4].detail, link: null },
+      { id: 't_j5_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '11h00', dur: '30min', detail: ['Plan détaillé ou introduction complète'], link: null },
+      { id: 't_j5_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h00', dur: '1h', detail: [], link: null },
+      { id: 't_j5_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[4].label, time: '14h00', dur: '2h', detail: ALL_MATHS[4].chapitres, link: ALL_MATHS[4].url },
+      { id: 't_j5_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Cours + questions classiques', time: '16h00', dur: '1h', detail: ['Relire le cours', 'Questions classiques'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
+      { id: 't_j5_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions', time: '17h00', dur: '1h30', detail: ['Notion ou auteur', 'Correction à relire'], link: null },
+      { id: 't_j5_7', mat: 'pause', color: 'c-pause', name: 'Dîner', sous: '', time: '18h00', dur: '45min', detail: [], link: null },
+      { id: 't_j5_8', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Compréhension + expression', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
+      { id: 't_j5_9', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Entraînement complet', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
+      { id: 't_j5_10', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h15', dur: '35min', detail: ['Toutes cartes dues'], link: null },
+    ]
+  },
+  // ── VENDREDI 11 AVRIL — journée allégée (max 4h) ──
+  {
+    id: 'j6', date: 11, mois: 'avril', jour: 'Vendredi', semaine: 1,
+    note: '⚠️ Journée allégée — maximum 4h de travail. Profite de la pause !',
+    mathsIdx: -1,
+    taches: [
+      { id: 't_j6_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours (révision légère)', time: '10h00', dur: '30min', detail: ['Plan détaillé ou relecture d\'une correction'], link: null },
+      { id: 't_j6_2', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour — ne pas sauter !', time: '10h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
+      { id: 't_j6_3', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Lecture ou écoute légère', time: '11h15', dur: '1h', detail: ['Article ou podcast en anglais', 'Vocab léger'], link: null },
+      { id: 't_j6_4', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Relecture légère', time: '12h30', dur: '1h', detail: ['Relecture d\'une correction ou d\'une notion', 'Pas de rédaction'], link: null },
+    ]
+  },
+  // ── SAMEDI 12 AVRIL — pas de travail le matin ──
+  {
+    id: 'j7', date: 12, mois: 'avril', jour: 'Samedi', semaine: 1,
+    note: '⚠️ Pas de travail le matin. Reprise l\'après-midi si tu le souhaites.',
+    mathsIdx: -1,
+    weekend: true,
+    taches: [
+      { id: 't_j7_1', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour — à ne pas sauter', time: '14h00', dur: '35min', detail: ['Toutes cartes dues'], link: null },
+      { id: 't_j7_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Relecture légère', sous: 'Relire les chapitres de la semaine', time: '15h00', dur: '1h30', detail: ['Relecture rapide des définitions', 'Révision des problématiques vues'], link: null },
+      { id: 't_j7_3', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocabulaire léger', time: '16h30', dur: '30min', detail: ['Vocabulaire', 'Quelques expressions idiomatiques'], link: null },
+    ]
+  },
+  // ── DIMANCHE 13 AVRIL — S2, début 9h ──
+  {
+    id: 'j8', date: 13, mois: 'avril', jour: 'Dimanche', semaine: 2,
+    mathsIdx: 5,
+    taches: [
+      { id: 't_j8_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Mondialisation — Partie 1 (flux, FMN, IDE)', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[5].detail, link: null },
+      { id: 't_j8_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
+      { id: 't_j8_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '30min repas · 30min sieste', time: '13h30', dur: '1h', detail: [], link: null },
+      { id: 't_j8_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[5].label, time: '14h30', dur: '2h', detail: ALL_MATHS[5].chapitres, link: ALL_MATHS[5].url },
+      { id: 't_j8_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours', time: '16h30', dur: '1h', detail: ['Cours du jour', 'Questions classiques'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
+      { id: 't_j8_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Correction à relire'], link: null },
+      { id: 't_j8_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocab + expression + civilisation', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
+      { id: 't_j8_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab + grammaire + civ.', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
+      { id: 't_j8_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
+    ]
+  },
+  // ── LUNDI 14 AVRIL ──
+  {
+    id: 'j9', date: 14, mois: 'avril', jour: 'Lundi', semaine: 2,
+    mathsIdx: 6,
+    taches: [
+      { id: 't_j9_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Mondialisation (2/2) + Fluctuations et crises + OG-DG', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[6].detail, link: null },
+      { id: 't_j9_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
+      { id: 't_j9_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
+      { id: 't_j9_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[6].label, time: '14h30', dur: '2h', detail: ALL_MATHS[6].chapitres, link: ALL_MATHS[6].url },
+      { id: 't_j9_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours + théorèmes', time: '16h30', dur: '1h', detail: ['Cours du jour', 'Retour sur points difficiles'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-de-cours.pdf' },
+      { id: 't_j9_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions + rédaction', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Introduction rédigée'], link: null },
+      { id: 't_j9_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocab + expression + civilisation', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
+      { id: 't_j9_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab + grammaire + civ.', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
+      { id: 't_j9_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
+    ]
+  },
+  // ── MARDI 15 AVRIL ──
+  {
+    id: 'j10', date: 15, mois: 'avril', jour: 'Mardi', semaine: 2,
+    mathsIdx: 7,
+    taches: [
+      { id: 't_j10_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'SMI + GF + Inflation', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[7].detail, link: null },
+      { id: 't_j10_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
+      { id: 't_j10_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
+      { id: 't_j10_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[7].label, time: '14h30', dur: '2h', detail: ALL_MATHS[7].chapitres, link: ALL_MATHS[7].url },
+      { id: 't_j10_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours', time: '16h30', dur: '1h', detail: ['Cours du jour', 'Questions classiques'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
+      { id: 't_j10_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Correction'], link: null },
+      { id: 't_j10_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Entraînement complet', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
+      { id: 't_j10_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Entraînement complet', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
+      { id: 't_j10_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
+    ]
+  },
+  // ── MERCREDI 16 AVRIL ──
+  {
+    id: 'j11', date: 16, mois: 'avril', jour: 'Mercredi', semaine: 2,
+    mathsIdx: 8,
+    taches: [
+      { id: 't_j11_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'IS-LM + IS-LM-BP + Balance des paiements + Taux de change', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[8].detail, link: null },
+      { id: 't_j11_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
+      { id: 't_j11_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
+      { id: 't_j11_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[8].label, time: '14h30', dur: '2h', detail: ALL_MATHS[8].chapitres, link: ALL_MATHS[8].url },
+      { id: 't_j11_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Retour sur chapitres techniques', time: '16h30', dur: '1h', detail: ['Cours Markov, équadiff, estimateurs', 'Questions de cours oraux'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-de-cours.pdf' },
+      { id: 't_j11_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions + rédaction', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Introduction ou développement rédigé'], link: null },
+      { id: 't_j11_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocab + expression + civilisation', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
+      { id: 't_j11_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Vocab + grammaire + civ.', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
+      { id: 't_j11_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
+    ]
+  },
+  // ── JEUDI 17 AVRIL ──
+  {
+    id: 'j12', date: 17, mois: 'avril', jour: 'Jeudi', semaine: 2,
+    mathsIdx: 9,
+    taches: [
+      { id: 't_j12_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Révision bloc monétaire — chapitres techniques', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[9].detail, link: null },
+      { id: 't_j12_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours (bloc monétaire)', time: '12h00', dur: '30min', detail: ['Plan ou introduction sur thème monétaire'], link: null },
+      { id: 't_j12_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
+      { id: 't_j12_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[9].label, time: '14h30', dur: '2h', detail: ALL_MATHS[9].chapitres, link: ALL_MATHS[9].url },
+      { id: 't_j12_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Révision générale', time: '16h30', dur: '1h', detail: ['Cours du jour', 'Questions classiques difficiles'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
+      { id: 't_j12_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision notions', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Correction'], link: null },
+      { id: 't_j12_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Entraînement complet', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
+      { id: 't_j12_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Entraînement complet', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
+      { id: 't_j12_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
+    ]
+  },
+  // ── VENDREDI 18 AVRIL ──
+  {
+    id: 'j13', date: 18, mois: 'avril', jour: 'Vendredi', semaine: 2,
+    mathsIdx: 10,
+    taches: [
+      { id: 't_j13_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Europe + Chômage', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[10].detail, link: null },
+      { id: 't_j13_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
+      { id: 't_j13_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
+      { id: 't_j13_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[10].label, time: '14h30', dur: '2h', detail: ALL_MATHS[10].chapitres, link: ALL_MATHS[10].url },
+      { id: 't_j13_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Questions de cours', time: '16h30', dur: '1h', detail: ['Cours du jour', 'Questions classiques'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
+      { id: 't_j13_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision + rédaction', time: '17h30', dur: '1h30', detail: ['Notion ou auteur', 'Rédiger un développement'], link: null },
+      { id: 't_j13_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Entraînement complet', time: '19h00', dur: '1h', detail: ['Vocabulaire', 'Expression', 'Civilisation'], link: null },
+      { id: 't_j13_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Entraînement complet', time: '20h00', dur: '1h', detail: ['Vocabulaire', 'Grammaire', 'Civilisation'], link: null },
+      { id: 't_j13_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour', time: '21h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
+    ]
+  },
+  // ── SAMEDI 19 AVRIL — dimanche, salle fermée, moins intense ──
+  {
+    id: 'j14', date: 19, mois: 'avril', jour: 'Samedi', semaine: 2,
+    note: '⚠️ Salle de travail fermée — journée moins intense, travaille depuis chez toi.',
+    weekend: true,
+    mathsIdx: 11,
+    taches: [
+      { id: 't_j14_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Politique de l\'emploi + Révision chômage technique', time: '9h00', dur: '3h', detail: CHAPITRES_ESH[11].detail, link: null },
+      { id: 't_j14_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours', time: '12h00', dur: '30min', detail: ['Plan ou introduction'], link: null },
+      { id: 't_j14_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
+      { id: 't_j14_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[11].label, time: '14h30', dur: '2h', detail: ALL_MATHS[11].chapitres, link: ALL_MATHS[11].url },
+      { id: 't_j14_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours', sous: 'Révision allégée', time: '16h30', dur: '1h', detail: ['Cours léger', 'Questions classiques'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-classiques.pdf' },
+      { id: 't_j14_6', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Vocabulaire + lecture', time: '17h30', dur: '1h', detail: ['Vocabulaire', 'Lecture article de presse'], link: null },
+      { id: 't_j14_7', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour — ne pas sauter', time: '18h30', dur: '35min', detail: ['Toutes cartes dues'], link: null },
+    ]
+  },
+  // ── DIMANCHE 20 AVRIL — dernier jour ──
+  {
+    id: 'j15', date: 20, mois: 'avril', jour: 'Dimanche', semaine: 2,
+    note: '🏁 Dernier jour de révisions — révision de synthèse et méthodes.',
+    mathsIdx: 12,
+    taches: [
+      { id: 't_j15_1', mat: 'ESH', color: 'c-esh', name: 'ESH — Cours', sous: 'Démographie + Politiques sociales + Structure sociale + Mobilité', time: '9h00', dur: '3h', detail: [...CHAPITRES_ESH[12].detail, ...CHAPITRES_ESH[13].detail], link: null },
+      { id: 't_j15_2', mat: 'ESH', color: 'c-esh', name: 'ESH — Sujet', sous: 'Sujet type concours — entraînement final', time: '12h00', dur: '30min', detail: ['Plan ou introduction complète'], link: null },
+      { id: 't_j15_3', mat: 'pause', color: 'c-pause', name: 'Déjeuner + sieste', sous: '', time: '13h30', dur: '1h', detail: [], link: null },
+      { id: 't_j15_4', mat: 'Maths', color: 'c-maths', name: 'Maths — 2 exercices concours', sous: ALL_MATHS[12] ? ALL_MATHS[12].label : '2A — Révision annales concours', time: '14h30', dur: '2h', detail: ALL_MATHS[12] ? ALL_MATHS[12].chapitres : ['Annales BCE/Ecricome', 'Exercices type concours toutes thématiques'], link: 'https://jeremylegendre.fr/annales-concours-bce-ecricome/' },
+      { id: 't_j15_5', mat: 'Maths', color: 'c-maths', name: 'Maths — Révision de cours finale', sous: 'Révision de synthèse', time: '16h30', dur: '1h', detail: ['Questions de cours complètes', 'Points faibles identifiés'], link: 'https://jeremylegendre.fr/wp-content/uploads/Questions-de-cours.pdf' },
+      { id: 't_j15_6', mat: 'Philo', color: 'c-philo', name: 'Philosophie', sous: 'Révision finale + méthode', time: '17h30', dur: '1h30', detail: ['Révision des notions clés', 'Relecture méthode de la dissertation'], link: null },
+      { id: 't_j15_7', mat: 'Anglais', color: 'c-anglais', name: 'Anglais', sous: 'Révision finale', time: '19h00', dur: '1h', detail: ['Vocabulaire prioritaire', 'Relecture méthode'], link: null },
+      { id: 't_j15_8', mat: 'Italien', color: 'c-italien', name: 'Italien', sous: 'Révision finale', time: '20h00', dur: '1h', detail: ['Vocabulaire prioritaire', 'Grammaire clé', 'Méthode'], link: null },
+      { id: 't_j15_9', mat: 'Anki', color: 'c-anki', name: 'Anki', sous: 'Cartes du jour — dernière session !', time: '21h30', dur: '35min', detail: ['Toutes cartes dues', 'Bien mémoriser !'], link: null },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let state = {};
+const STORAGE_KEY = 'planning_revision_2026';
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    state = saved ? JSON.parse(saved) : {};
+  } catch(e) { state = {}; }
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function isChecked(id) { return !!state[id]; }
+function toggleCheck(id) {
+  state[id] = !state[id];
+  saveState();
+  updateAll();
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+const JOURS_NOM = ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'];
+
+function buildGrids() {
+  const s1 = document.getElementById('grid-s1');
+  const s2 = document.getElementById('grid-s2');
+  s1.innerHTML = '';
+  s2.innerHTML = '';
+
+  JOURS.forEach((j, idx) => {
+    const el = document.createElement('div');
+    el.className = 'jour-mini' + (j.weekend ? ' weekend' : '');
+    el.id = 'mini-' + j.id;
+    el.onclick = () => ouvrirDetail(j.id);
+
+    const tachesActives = j.taches.filter(t => t.mat !== 'pause');
+    const done = tachesActives.filter(t => isChecked(t.id)).length;
+    const pct = tachesActives.length > 0 ? Math.round(done / tachesActives.length * 100) : 0;
+
+    const shortDay = j.jour.substring(0, 3).toLowerCase();
+    const dayMap = {'dim':'Dim.','lun':'Lun.','mar':'Mar.','mer':'Mer.','jeu':'Jeu.','ven':'Ven.','sam':'Sam.'};
+
+    el.innerHTML = `
+      <span class="jm-label">${dayMap[shortDay] || j.jour.substring(0,3)}</span>
+      <span class="jm-date">${j.date}</span>
+      <div class="jm-progress"><div class="jm-bar" style="width:${pct}%"></div></div>
+      <div class="jm-check"></div>
+    `;
+    if (pct === 100) el.classList.add('complet');
+
+    (j.semaine === 1 ? s1 : s2).appendChild(el);
+  });
+}
+
+let currentJourId = null;
+
+function ouvrirDetail(jourId) {
+  const j = JOURS.find(x => x.id === jourId);
+  if (!j) return;
+  currentJourId = jourId;
+
+  // Mark active
+  document.querySelectorAll('.jour-mini').forEach(el => el.classList.remove('active'));
+  const mini = document.getElementById('mini-' + jourId);
+  if (mini) mini.classList.add('active');
+
+  // Titre
+  document.getElementById('detail-titre').innerHTML = `${j.jour} ${j.date} ${j.mois}`;
+
+  // Badges
+  const badges = document.getElementById('detail-badges');
+  const semLabel = j.semaine === 1 ? 'Semaine 1' : 'Semaine 2';
+  const heureDebut = j.semaine === 1 ? '8h00' : '9h00';
+  badges.innerHTML = `<span class="badge badge-week">${semLabel}</span><span class="badge badge-hours">Début ${heureDebut}</span>`;
+
+  // Note spéciale
+  const noteEl = document.getElementById('detail-note');
+  if (j.note) {
+    noteEl.innerHTML = `<div class="note-special">${j.note}</div>`;
+  } else {
+    noteEl.innerHTML = '';
+  }
+
+  // Tâches
+  const container = document.getElementById('detail-taches');
+  container.innerHTML = '';
+
+  let lastMat = null;
+  j.taches.forEach((t, ti) => {
+    // Séparateur si changement de bloc
+    if (t.mat !== lastMat && t.mat !== 'pause') {
+      if (lastMat !== null && lastMat !== 'pause') {
+        const sep = document.createElement('div');
+        sep.className = 'sep';
+        sep.innerHTML = `<div class="sep-line"></div><span class="sep-label">${t.mat}</span><div class="sep-line"></div>`;
+        container.appendChild(sep);
+      }
+    }
+    lastMat = t.mat;
+
+    const checked = isChecked(t.id);
+    const isPause = t.mat === 'pause';
+    const hasDetail = t.detail && t.detail.length > 0;
+
+    const line = document.createElement('div');
+    line.className = 'planning-line' + (checked && !isPause ? ' done' : '') + (isPause ? ' pause-line' : '');
+    line.id = 'line-' + t.id;
+
+    if (isPause) {
+      line.style.cssText = 'background:var(--parchment);border-color:var(--sand);opacity:0.7;';
+      line.innerHTML = `
+        <div class="tache-main" style="cursor:default;">
+          <div class="tache-color ${t.color}" style="opacity:0.5;"></div>
+          <div class="tache-info">
+            <div class="tache-name" style="color:var(--brown-light);font-size:0.8rem;">${t.name}</div>
+            ${t.sous ? `<div class="tache-sous">${t.sous}</div>` : ''}
+          </div>
+          <div class="tache-right">
+            <span class="tache-time">${t.time}</span>
+            <span class="tache-dur">${t.dur}</span>
+          </div>
+        </div>`;
+    } else {
+      line.innerHTML = `
+        <div class="tache-main">
+          <div class="tache-check" onclick="event.stopPropagation();toggleCheck('${t.id}')">
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+              <path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="tache-color ${t.color}"></div>
+          <div class="tache-info">
+            <div class="tache-name">${t.name}</div>
+            ${t.sous ? `<div class="tache-sous">${t.sous}</div>` : ''}
+          </div>
+          <div class="tache-right">
+            <span class="tache-time">${t.time}</span>
+            <span class="tache-dur">${t.dur}</span>
+            ${hasDetail ? `<button class="expand-btn" onclick="toggleDetail('detail-${t.id}')" title="Voir détails">▾</button>` : ''}
+          </div>
+        </div>
+        ${hasDetail ? `
+        <div class="tache-detail" id="detail-${t.id}">
+          <ul class="detail-list">
+            ${t.detail.map(d => `<li>${d}</li>`).join('')}
+          </ul>
+          ${t.link ? `<a href="${t.link}" target="_blank" class="detail-link">↗ Accéder aux ressources</a>` : ''}
+        </div>` : ''}`;
+    }
+
+    container.appendChild(line);
+  });
+
+  // Afficher
+  const detailEl = document.getElementById('detail-jour');
+  detailEl.classList.add('visible');
+  detailEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  updateJourProgress(j);
+}
+
+function toggleDetail(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+function fermerDetail() {
+  document.getElementById('detail-jour').classList.remove('visible');
+  document.querySelectorAll('.jour-mini').forEach(el => el.classList.remove('active'));
+  currentJourId = null;
+}
+
+function updateJourProgress(j) {
+  const tachesActives = j.taches.filter(t => t.mat !== 'pause');
+  const done = tachesActives.filter(t => isChecked(t.id)).length;
+  const pct = tachesActives.length > 0 ? Math.round(done / tachesActives.length * 100) : 0;
+  document.getElementById('jour-progress-fill').style.width = pct + '%';
+  document.getElementById('jour-progress-pct').textContent = pct + '%';
+}
+
+function updateAll() {
+  // Recalc global stats
+  let totalTaches = 0, totalDone = 0;
+  JOURS.forEach(j => {
+    j.taches.filter(t => t.mat !== 'pause').forEach(t => {
+      totalTaches++;
+      if (isChecked(t.id)) totalDone++;
+    });
+  });
+
+  document.getElementById('stat-total').textContent = totalDone;
+  document.getElementById('stat-pct').textContent = Math.round(totalDone / totalTaches * 100) + '%';
+
+  // Jours restants
+  const today = new Date();
+  const fin = new Date(2026, 3, 20); // 20 avril 2026
+  const diff = Math.max(0, Math.ceil((fin - today) / 86400000));
+  document.getElementById('stat-jours').textContent = diff;
+
+  // Rebuild grids
+  buildGrids();
+
+  // Refresh detail if open
+  if (currentJourId) {
+    const j = JOURS.find(x => x.id === currentJourId);
+    if (j) {
+      // Update check states
+      j.taches.filter(t => t.mat !== 'pause').forEach(t => {
+        const line = document.getElementById('line-' + t.id);
+        if (line) {
+          if (isChecked(t.id)) line.classList.add('done');
+          else line.classList.remove('done');
+          const check = line.querySelector('.tache-check');
+          if (check) {
+            check.style.background = isChecked(t.id) ? 'var(--green)' : '';
+            check.style.borderColor = isChecked(t.id) ? 'var(--green)' : '';
+          }
+        }
+      });
+      updateJourProgress(j);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+loadState();
+buildGrids();
+updateAll();
+
+// Auto-ouvrir aujourd'hui si dans la période
+const now = new Date();
+const nowDate = now.getDate();
+const nowMonth = now.getMonth(); // 3 = avril
+if (nowMonth === 3) {
+  const todayJour = JOURS.find(j => j.date === nowDate);
+  if (todayJour) {
+    setTimeout(() => ouvrirDetail(todayJour.id), 300);
+  }
+}
+</script>
+</body>
+</html>
